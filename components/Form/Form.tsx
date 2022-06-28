@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useNinetailed, useProfile } from '@ninetailed/experience.js-next';
 import { Field, Form as ContactForm } from 'react-final-form';
 
@@ -16,12 +16,7 @@ export const Form: React.FC = () => {
     [key: string]: string;
   };
 
-  useEffect(() => {
-    console.log(profile);
-  }, [profile]);
-
   const onSubmit = async (values: FormTraits) => {
-    console.log(values);
     if (profile) {
       identify(profile.id, values)
         .then((_) => {
@@ -33,50 +28,6 @@ export const Form: React.FC = () => {
     }
     setShowForm(false);
   };
-
-  /* const validationSchema = Yup.object({
-    firstName: Yup.string().required(),
-    lastName: Yup.string().required(),
-    companyName: Yup.string().required(),
-    companySize: Yup.string().required(),
-    businessEmail: Yup.string().email(),
-  }); */
-  /* type FormValidationSchema = Yup.InferType<typeof validationSchema>;
-  const validateFormValues = (schema: FormValidationSchema) => {
-    return async (values: any) => {
-      /!* if (typeof schema === 'function') {
-        schema = schema();
-      } *!/
-      try {
-        await schema.validate(values, { abortEarly: false });
-      } catch (err) {
-        const errors = err.inner.reduce((formError, innerError) => {
-          return setIn(formError, innerError.path, innerError.message);
-        }, {});
-
-        return errors;
-      }
-    };
-  };
-
-  const validate = validateFormValues(validationSchema);
-  const validate = async (values) => {
-    try {
-      await validationSchema.validate(values, { abortEarly: false });
-    } catch (err: unknown) {
-      console.log(err.inner);
-      /* return err.inner.reduce(
-        (formError: any, innerError: { path: any; message: any }) => {
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-          return {
-            ...formError,
-            [innerError.path]: innerError.message,
-          };
-        },
-        {}
-      );
-    }
-  }} */
 
   return (
     <>
