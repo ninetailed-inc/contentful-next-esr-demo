@@ -91,11 +91,11 @@ export const Form: React.FC = () => {
             onSubmit={onSubmit}
             validate={(values) => {
               const errors = {} as ErrorType;
-              if (!values.firstname) {
-                errors.firstname = defaultErrorMessage;
+              if (!values.firstName) {
+                errors.firstName = defaultErrorMessage;
               }
-              if (!values.lastname) {
-                errors.lastname = defaultErrorMessage;
+              if (!values.lastName) {
+                errors.lastName = defaultErrorMessage;
               }
               if (!values.companyName) {
                 errors.companyName = defaultErrorMessage;
@@ -119,12 +119,7 @@ export const Form: React.FC = () => {
                   className="flex flex-col space-y-4 items-start"
                 >
                   <fieldset className="flex flex-row w-full justify-between">
-                    <Field
-                      name="firstName"
-                      validate={(value) => {
-                        return value ? undefined : 'Required';
-                      }}
-                    >
+                    <Field name="firstName">
                       {({ input, meta }) => {
                         return (
                           <div className="w-[48%] flex flex-col">
