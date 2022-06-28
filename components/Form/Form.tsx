@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNinetailed, useProfile } from '@ninetailed/experience.js-next';
 import { Field, Form as ContactForm } from 'react-final-form';
-import * as Yup from 'yup';
 
 const defaultErrorMessage = 'Please complete this required field';
 export const Form: React.FC = () => {
