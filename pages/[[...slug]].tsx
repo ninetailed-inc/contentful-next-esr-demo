@@ -49,11 +49,13 @@ export const getStaticProps: GetStaticProps = async ({ params, preview }) => {
   console.log({ 'SLUG:rawSlug': rawSlug });
 
   const audiencesSlug = rawSlug[0] || '';
+  console.log({ 'SLUG:audiencesSlug': audiencesSlug });
   const isPersonalized = audiencesSlug.startsWith(';');
   const audiences = isPersonalized
     ? audiencesSlug.split(';')[1].split(',')
     : [];
   const slug = isPersonalized ? rawSlug.slice(1).join('/') : rawSlug.join('/');
+  console.log({ 'SLUG:slug': slug });
   const page = await getPage({
     preview,
     slug: slug === '' ? '/' : slug,
