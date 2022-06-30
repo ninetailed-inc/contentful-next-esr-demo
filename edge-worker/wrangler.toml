@@ -1,0 +1,11 @@
+name = "contentful-next-esr-demo"
+main = "src/index.ts"
+account_id = "37899b450014da109f58073d3134d8a4"
+usage_model = "bundled"
+compatibility_date = "2022-04-27"
+minify = true
+route = "https://contentful-next-esr-demo.ninetailed.io/*"
+
+[vars]
+NINETAILED_API_KEY = '729c0659-366d-40f2-a556-8d16b1c8dc16'
+NINETAILED_ENVIRONMENT = 'main'

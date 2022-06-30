@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "outDir": "../../dist/out-tsc",
+    "module": "commonjs",
+    "types": ["node", "@cloudflare/workers-types"],
+    "esModuleInterop": true,
+    "lib": ["es2020"],
+    "resolveJsonModule": true
+  },
+  "include": ["**/*.ts"]
+}
