@@ -6,7 +6,12 @@ type Cookies = {
 
 const getCookies = (request: Request): Cookies => {
   const cookieStr = request.headers.get('Cookie');
-  const cookieEntries = cookieStr?.split(';').map((cookie) => {
+
+  if (!cookieStr) {
+    return {};
+  }
+
+  const cookieEntries = cookieStr.split(';').map((cookie) => {
     return cookie.split('=');
   });
   const cookies: Cookies = Object.fromEntries(cookieEntries);
@@ -40,13 +45,15 @@ export default {
 
     console.log(profile);
 
-    if (!profile.audiences.length) {
+    if (!profile?.audiences?.length) {
       return fetch(request);
     }
 
     const newUrl = new URL(request.url);
-    const audiencePath = `/;${profile.audiences.join(',')}`;
-    newUrl.pathname = `${audiencePath}${newUrl.pathname}`;
+    const audiencePath = profile.audiences?.join(',');
+    newUrl.pathname = `/;${audiencePath}${newUrl.pathname}`;
+    // remove trailing slash
+    newUrl.pathname = newUrl.pathname.replace(/\/$/, '');
     console.log(`Redirecting to ${newUrl.href}`);
     const newRequest = new Request(newUrl.href, request);
     return fetch(newRequest);
