@@ -54,6 +54,11 @@ export default {
     // remove trailing slash
     newUrl.pathname = newUrl.pathname.replace(/\/$/, '');
     const newRequest = new Request(newUrl.href, request);
-    return fetch(newRequest);
+    return fetch(newRequest, {
+      cf: {
+        cacheTtl: 60,
+        cacheEverything: true,
+      },
+    });
   },
 };
