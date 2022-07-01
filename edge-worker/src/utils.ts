@@ -8,6 +8,8 @@ import {
   Cache,
   buildEmptyCache,
 } from '@ninetailed/experience.js-shared';
+import { parse as parseLanguage } from 'accept-language-parser';
+
 import { NINETAILED_PROFILE_CACHE_COOKIE } from '@ninetailed/experience.js-plugin-ssr';
 
 const BASE_URL = 'https://api.ninetailed.co';
@@ -100,10 +102,17 @@ export const fetchEdgeProfile = async ({
   };
 };
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const getLocale = (request: Request): string => {
-  // TODO get locale from request
-  return 'en-US';
+  const languageHeader = request.headers.get('Accept-Language');
+  const languages = parseLanguage(languageHeader || '');
+
+  const locale = languages
+    .map((language) => {
+      return `${language.code}${language.region ? `-${language.region}` : ''}`;
+    })
+    .join(',');
+
+  return locale;
 };
 
 export const buildNinetailedEdgeRequestContext = (
