@@ -12,7 +12,7 @@ const getCookies = (request: Request): Cookies => {
   }
 
   const cookieEntries = cookieStr.split(';').map((cookie) => {
-    return cookie.split('=');
+    return cookie.trim().split('=');
   });
   const cookies: Cookies = Object.fromEntries(cookieEntries);
   return cookies;
@@ -25,8 +25,7 @@ const getIP = (request: Request): string => {
 
 export default {
   async fetch(request: Request, env): Promise<Response> {
-    const url = new URL(request.url);
-    if (url.pathname !== '/') {
+    if (!request.headers.get('Accept').includes('text/html')) {
       return fetch(request);
     }
 
@@ -54,7 +53,6 @@ export default {
     newUrl.pathname = `/;${audiencePath}${newUrl.pathname}`;
     // remove trailing slash
     newUrl.pathname = newUrl.pathname.replace(/\/$/, '');
-    console.log(`Redirecting to ${newUrl.href}`);
     const newRequest = new Request(newUrl.href, request);
     return fetch(newRequest);
   },
