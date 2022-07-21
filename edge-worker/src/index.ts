@@ -4,6 +4,11 @@ type Cookies = {
   [key: string]: string;
 };
 
+type Env = {
+  NINETAILED_API_KEY: string;
+  NINETAILED_ENVIRONMENT: string;
+};
+
 const getCookies = (request: Request): Cookies => {
   const cookieStr = request.headers.get('Cookie');
 
@@ -19,13 +24,14 @@ const getCookies = (request: Request): Cookies => {
 };
 
 const getIP = (request: Request): string => {
-  const ip = request.headers.get('CF-Connecting-IP');
+  const ip = request.headers.get('CF-Connecting-IP') || '';
   return ip;
 };
 
 export default {
-  async fetch(request: Request, env): Promise<Response> {
-    if (!request.headers.get('Accept').includes('text/html')) {
+  async fetch(request: Request, env: Env): Promise<Response> {
+    const acceptHeaders = request.headers.get('Accept') || '';
+    if (!acceptHeaders.includes('text/html')) {
       return fetch(request);
     }
 
@@ -49,16 +55,23 @@ export default {
     }
 
     const newUrl = new URL(request.url);
-    const audiencePath = profile.audiences?.join(',');
+    const audiencePath = profile.audiences.sort().join(',');
     newUrl.pathname = `/;${audiencePath}${newUrl.pathname}`;
     // remove trailing slash
     newUrl.pathname = newUrl.pathname.replace(/\/$/, '');
     const newRequest = new Request(newUrl.href, request);
-    return fetch(newRequest, {
-      cf: {
-        cacheTtl: 60,
-        cacheEverything: true,
-      },
-    });
+
+    const response = (
+      await fetch(newRequest, {
+        cf: {
+          cacheTtl: 60,
+          cacheEverything: true,
+        },
+      })
+    ).clone();
+
+    response.headers.append('Set-Cookie', `ntaid=${profile.id}`);
+
+    return response;
   },
 };
