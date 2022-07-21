@@ -98,7 +98,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
   }; */
   return {
     paths: [...paths, { params: { slug: [''] } }],
-    fallback: true,
+    fallback: 'blocking',
   };
 };
 

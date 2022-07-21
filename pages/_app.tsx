@@ -50,7 +50,7 @@ const ESRDemoApp = ({ Component, pageProps }: AppProps) => {
 
   console.log({ 'APP:pageProps': pageProps });
   console.log({
-    'APP:NINETAILED_API_KEY': process.env.NEXT_PUBLIC_NINETAILED_API_KEY,
+    'APP:NINETAILED_API_KEY': process.env.NEXT_PUBLIC_NINETAILED_CLIENT_ID,
   });
   console.log({
     'APP:NINETAILED_ENVIRONMENT':
