@@ -505,7 +505,7 @@
     ts-toolbelt "^9.6.0"
     uuid "^8.3.2"
 
-"@ninetailed/experience.js@2.0.0-beta.22":
+"@ninetailed/experience.js@2.0.0-beta.22", "@ninetailed/experience.js@^2.0.0-beta.22":
   version "2.0.0-beta.22"
   resolved "https://registry.yarnpkg.com/@ninetailed/experience.js/-/experience.js-2.0.0-beta.22.tgz#ddaee404323367e58c0c1fdac652c0db043b4fa4"
   integrity sha512-47a9MKiEGWczPSZB34PGdwcrGuRZh+eCERT0YFV7VILqZBU35iehIcyQ5FqULFmWZgSISZltr6oVTuQJPmaYbw==

@@ -1,3 +1,8 @@
+import {
+  selectEligibleExperiences,
+  isExperienceMatch,
+} from '@ninetailed/experience.js';
+import { getActiveExperiments, getExperiencesOnPage } from './contentful';
 import { buildNinetailedEdgeRequestContext, fetchEdgeProfile } from './utils';
 
 type Cookies = {
@@ -35,7 +40,9 @@ export default {
       return fetch(request);
     }
 
-    const { profile } = await fetchEdgeProfile({
+    const slug = new URL(request.url).pathname;
+
+    const fetchProfileOptions = {
       ctx: buildNinetailedEdgeRequestContext(request),
       clientId: env.NINETAILED_API_KEY,
       environment: env.NINETAILED_ENVIRONMENT,
@@ -46,9 +53,26 @@ export default {
         region: request.cf?.region,
         country: request.cf?.country,
       },
+    };
+
+    const [{ profile }, activeExperiments, experiencesOnPage] =
+      await Promise.all([
+        fetchEdgeProfile(fetchProfileOptions),
+        getActiveExperiments(),
+        getExperiencesOnPage(slug),
+      ]);
+
+    console.log(activeExperiments);
+    console.log(experiencesOnPage);
+
+    const eligibleExperiences = selectEligibleExperiences({
+      experiences: experiencesOnPage,
+      activeExperiments,
     });
 
-    console.log(profile);
+    const matchingExperiences = eligibleExperiences.filter((experience) => {
+      return isExperienceMatch({ experience, activeExperiments, profile });
+    });
 
     if (!profile?.audiences?.length) {
       return fetch(request);

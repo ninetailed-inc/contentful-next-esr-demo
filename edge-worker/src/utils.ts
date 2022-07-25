@@ -1,6 +1,5 @@
 import { v4 as uuid } from 'uuid';
 import {
-  IngestProfileEventsResponseBody,
   Profile,
   GeoLocation,
   NinetailedRequestContext,
@@ -84,7 +83,7 @@ export const fetchEdgeProfile = async ({
 
   const {
     data: { profile, traitsUpdatedAt, signals },
-  } = (await request.json()) as IngestProfileEventsResponseBody;
+  } = await request.json();
 
   return {
     profile,
