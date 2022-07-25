@@ -1,9 +1,16 @@
 import {
   selectEligibleExperiences,
   isExperienceMatch,
+  selectActiveExperiments,
 } from '@ninetailed/experience.js';
-import { getActiveExperiments, getExperiencesOnPage } from './contentful';
-import { buildNinetailedEdgeRequestContext, fetchEdgeProfile } from './utils';
+import {} from '@ninetailed/experience.js-shared';
+import { getAllExperiments, getExperiencesOnPage } from './contentful';
+import {
+  buildNinetailedEdgeRequestContext,
+  EXPERIENCE_TRAIT_PREFIX,
+  fetchEdgeProfile,
+  sendIdentify,
+} from './utils';
 
 type Cookies = {
   [key: string]: string;
@@ -34,7 +41,11 @@ const getIP = (request: Request): string => {
 };
 
 export default {
-  async fetch(request: Request, env: Env): Promise<Response> {
+  async fetch(
+    request: Request,
+    env: Env,
+    context: ExecutionContext
+  ): Promise<Response> {
     const acceptHeaders = request.headers.get('Accept') || '';
     if (!acceptHeaders.includes('text/html')) {
       return fetch(request);
@@ -55,28 +66,53 @@ export default {
       },
     };
 
-    const [{ profile }, activeExperiments, experiencesOnPage] =
-      await Promise.all([
-        fetchEdgeProfile(fetchProfileOptions),
-        getActiveExperiments(),
-        getExperiencesOnPage(slug),
-      ]);
+    const [{ profile }, allExperiments, experiencesOnPage] = await Promise.all([
+      fetchEdgeProfile(fetchProfileOptions),
+      getAllExperiments(),
+      getExperiencesOnPage(slug),
+    ]);
 
-    console.log(activeExperiments);
-    console.log(experiencesOnPage);
+    const joinedExperiments = selectActiveExperiments(allExperiments, profile);
 
     const eligibleExperiences = selectEligibleExperiences({
       experiences: experiencesOnPage,
-      activeExperiments,
+      activeExperiments: joinedExperiments,
     });
 
     const matchingExperiences = eligibleExperiences.filter((experience) => {
-      return isExperienceMatch({ experience, activeExperiments, profile });
+      return isExperienceMatch({
+        experience,
+        activeExperiments: joinedExperiments,
+        profile,
+      });
     });
 
-    if (!profile?.audiences?.length) {
-      return fetch(request);
+    // Join first experiment (if not in experiment already) and write to profile cache(cookie)
+    if (!joinedExperiments.length) {
+      const firstExperiment = matchingExperiences.find((experience) => {
+        return experience.type === 'nt_experiment';
+      });
+
+      if (firstExperiment) {
+        const traitKey = `${EXPERIENCE_TRAIT_PREFIX}${firstExperiment.id}`;
+        profile.traits[traitKey] = true;
+        context.waitUntil(
+          sendIdentify({
+            traits: { traitKey: true },
+            ctx: buildNinetailedEdgeRequestContext(request),
+            clientId: env.NINETAILED_API_KEY,
+            environment: env.NINETAILED_ENVIRONMENT,
+            cookies: getCookies(request),
+          })
+        );
+      }
     }
+
+    // Get variant index for each matching personalization + one experiment
+    // TODO
+
+    // Rewrite URL with matching experience + variant index
+    // TODO
 
     const newUrl = new URL(request.url);
     const audiencePath = profile.audiences.sort().join(',');

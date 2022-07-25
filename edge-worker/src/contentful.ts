@@ -60,7 +60,7 @@ export const getExperiencesOnPage = async (
     .map(entryToExperienceConfiguration);
 };
 
-export const getActiveExperiments = async (): Promise<
+export const getAllExperiments = async (): Promise<
   ExperienceConfiguration[]
 > => {
   // TODO: move to env
