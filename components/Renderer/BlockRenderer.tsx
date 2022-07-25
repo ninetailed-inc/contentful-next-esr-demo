@@ -1,11 +1,12 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import React from 'react';
 import * as Contentful from 'contentful';
 import get from 'lodash/get';
+import { Experience } from '@ninetailed/experience.js-next';
 import {
-  Personalize,
-  Variant,
-  PersonalizedComponent,
-} from '@ninetailed/experience.js-next';
+  ExperienceEntry,
+  ExperienceMapper,
+} from '@ninetailed/experience.js-utils-contentful';
 
 import { Hero } from '@/components/Hero';
 import { CTA } from '@/components/Cta';
@@ -37,9 +38,10 @@ type PersonalizedFields<T> = T & {
       id: Contentful.EntryFields.Symbol;
     }>;
   }>[];
+  nt_experiences?: ExperienceEntry[];
 };
 
-type Block = Contentful.Entry<PersonalizedFields<any>> & {
+type Block = Contentful.Entry<PersonalizedFields<unknown>> & {
   parent?: Contentful.Entry<any>;
 };
 
@@ -47,36 +49,10 @@ type BlockRendererProps = {
   block: Block | Block[];
 };
 
-const unwrapVariants = (
-  block: Contentful.Entry<PersonalizedFields<Block>>
-): Variant<any>[] => {
-  return (block.fields.nt_variants || [])
-    .filter((variant) => {
-      return !!variant.fields?.nt_audience;
-    })
-    .map((variant) => {
-      return {
-        id: variant.sys.id,
-        audience: {
-          id: variant.fields.nt_audience?.sys.id,
-        },
-        ...variant,
-      };
-    });
-};
+type ComponentRendererProps = Contentful.Entry<unknown>;
 
-const BlockRenderer = ({ block }: BlockRendererProps) => {
-  if (Array.isArray(block)) {
-    return (
-      <>
-        {block.map((b, index) => {
-          return <BlockRenderer key={`block-${b.sys.id}-${index}`} block={b} />;
-        })}
-      </>
-    );
-  }
-
-  const contentTypeId = get(block, 'sys.contentType.sys.id') as string;
+const ComponentRenderer: React.FC<ComponentRendererProps> = (props) => {
+  const contentTypeId = get(props, 'sys.contentType.sys.id') as string;
   const Component = ContentTypeMap[contentTypeId];
 
   if (!Component) {
@@ -84,19 +60,44 @@ const BlockRenderer = ({ block }: BlockRendererProps) => {
     return null;
   }
 
-  const { id } = block.sys;
+  // @ts-ignore
+  return <Component {...props} />;
+};
 
+const BlockRenderer = ({ block }: BlockRendererProps) => {
+  if (Array.isArray(block)) {
+    return (
+      <>
+        {block.map((b) => {
+          return <BlockRenderer key={`block-${b.sys.id}`} block={b} />;
+        })}
+      </>
+    );
+  }
+
+  const contentTypeId = get(block, 'sys.contentType.sys.id') as string;
+  const { id } = block.sys;
   const componentProps = {
     ...block,
     parent: block.parent,
   };
+
+  const experiences = (componentProps.fields.nt_experiences || []).map(
+    (experience) => {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+      return ExperienceMapper.mapExperience(experience, componentProps);
+    }
+  );
+
+  console.log(experiences);
   return (
     <div key={`${contentTypeId}-${id}`}>
-      <Personalize
+      <Experience
         {...componentProps}
-        id={componentProps.sys.id}
-        component={Component as PersonalizedComponent<any>}
-        variants={unwrapVariants(componentProps)}
+        id={id}
+        // @ts-ignore
+        component={ComponentRenderer}
+        experiences={experiences}
       />
     </div>
   );
