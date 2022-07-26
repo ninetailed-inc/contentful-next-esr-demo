@@ -11,12 +11,7 @@ import { getPagesOfType, getPage } from '@/lib/api';
 import { PAGE_CONTENT_TYPES } from '@/lib/constants';
 import { IPage } from '@/types/contentful';
 
-export type IPageProps = {
-  page: IPage;
-  ninetailed: { experienceVariantsMap: Record<string, number> };
-};
-
-const Page = ({ page, ninetailed }: IPageProps) => {
+const Page = ({ page }: { page: IPage }) => {
   const { profile: userProfile } = useProfile();
   console.log({ 'APP:UserProfile': userProfile });
   if (!page) {
