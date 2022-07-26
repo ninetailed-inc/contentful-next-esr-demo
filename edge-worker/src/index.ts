@@ -1,7 +1,8 @@
 import {
-  selectEligibleExperiences,
   isExperienceMatch,
   selectActiveExperiments,
+  selectEligibleExperiences,
+  selectExperienceVariant,
 } from '@ninetailed/experience.js';
 import {} from '@ninetailed/experience.js-shared';
 import { getAllExperiments, getExperiencesOnPage } from './contentful';
@@ -19,6 +20,11 @@ type Cookies = {
 type Env = {
   NINETAILED_API_KEY: string;
   NINETAILED_ENVIRONMENT: string;
+};
+
+type VariantSelection = {
+  experienceId: string;
+  variantIndex: number;
 };
 
 const getCookies = (request: Request): Cookies => {
@@ -87,39 +93,63 @@ export default {
       });
     });
 
-    // Join first experiment (if not in experiment already) and write to profile cache(cookie)
-    if (!joinedExperiments.length) {
-      const firstExperiment = matchingExperiences.find((experience) => {
-        return experience.type === 'nt_experiment';
-      });
-
-      if (firstExperiment) {
-        const traitKey = `${EXPERIENCE_TRAIT_PREFIX}${firstExperiment.id}`;
-        profile.traits[traitKey] = true;
-        context.waitUntil(
-          sendIdentify({
-            traits: { traitKey: true },
-            ctx: buildNinetailedEdgeRequestContext(request),
-            clientId: env.NINETAILED_API_KEY,
-            environment: env.NINETAILED_ENVIRONMENT,
-            cookies: getCookies(request),
-          })
-        );
+    const matchingPersonalizations = matchingExperiences.filter(
+      (experience) => {
+        return experience.type === 'nt_personalization';
       }
+    );
+
+    const firstExperiment = matchingExperiences.find((experience) => {
+      return experience.type === 'nt_experiment';
+    });
+
+    // Join first experiment (if not in experiment already) and write to profile cache(cookie)
+    if (!joinedExperiments.length && firstExperiment) {
+      const traitKey = `${EXPERIENCE_TRAIT_PREFIX}${firstExperiment.id}`;
+      profile.traits[traitKey] = true;
+      context.waitUntil(
+        sendIdentify({
+          traits: { traitKey: true },
+          ctx: buildNinetailedEdgeRequestContext(request),
+          clientId: env.NINETAILED_API_KEY,
+          environment: env.NINETAILED_ENVIRONMENT,
+          cookies: getCookies(request),
+        })
+      );
     }
 
-    // Get variant index for each matching personalization + one experiment
-    // TODO
-
-    // Rewrite URL with matching experience + variant index
-    // TODO
+    // Get variant index for each matching personalization + first experiment
+    const variantSelections: VariantSelection[] = [
+      ...matchingPersonalizations.map((experience) => {
+        return {
+          experienceId: experience.id,
+          variantIndex: 1,
+        };
+      }),
+      ...(firstExperiment
+        ? [
+            {
+              experienceId: firstExperiment.id,
+              variantIndex: selectDistribution({ firstExperiment, profile })
+                .index,
+            },
+          ]
+        : []),
+    ];
 
     const newUrl = new URL(request.url);
-    const audiencePath = profile.audiences.sort().join(',');
-    newUrl.pathname = `/;${audiencePath}${newUrl.pathname}`;
+    const variantsPath = variantSelections
+      .map((selection) => {
+        return `${selection.experienceId}=${selection.variantIndex}`;
+      })
+      .sort()
+      .join(',');
+    newUrl.pathname = `/;${variantsPath}${newUrl.pathname}`;
     // remove trailing slash
     newUrl.pathname = newUrl.pathname.replace(/\/$/, '');
     const newRequest = new Request(newUrl.href, request);
+
+    console.log(newUrl.href);
 
     const response = (
       await fetch(newRequest, {
