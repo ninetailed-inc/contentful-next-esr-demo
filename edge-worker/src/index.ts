@@ -71,11 +71,12 @@ export default {
       },
     };
 
-    const [{ profile }, allExperiments, experiencesOnPage] = await Promise.all([
-      fetchEdgeProfile(fetchProfileOptions),
-      getAllExperiments(),
-      getExperiencesOnPage(slug),
-    ]);
+    const [{ profile, cache }, allExperiments, experiencesOnPage] =
+      await Promise.all([
+        fetchEdgeProfile(fetchProfileOptions),
+        getAllExperiments(),
+        getExperiencesOnPage(slug),
+      ]);
 
     const joinedExperiments = selectActiveExperiments(allExperiments, profile);
 
@@ -105,7 +106,7 @@ export default {
     // Join first experiment (if not in experiment already) and write to profile cache(cookie)
     if (!joinedExperiments.length && firstExperiment) {
       const traitKey = `${EXPERIENCE_TRAIT_PREFIX}${firstExperiment.id}`;
-      profile.traits[traitKey] = true;
+      cache.traits[traitKey] = true;
       context.waitUntil(
         sendIdentify({
           traits: { traitKey: true },
@@ -159,7 +160,7 @@ export default {
     ).clone();
 
     response.headers.append('Set-Cookie', `ntaid=${profile.id}`);
-    response.headers.append('Set-Cookie', `ntpc=${JSON.stringify(profile)}`);
+    response.headers.append('Set-Cookie', `ntpc=${JSON.stringify(cache)}`);
 
     return response;
   },
