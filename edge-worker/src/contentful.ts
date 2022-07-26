@@ -1,4 +1,8 @@
 import { ExperienceConfiguration } from '@ninetailed/experience.js';
+import {
+  ExperienceMapper,
+  ExperienceEntry,
+} from '@ninetailed/experience.js-utils-contentful';
 import type { Entry, EntryCollection } from 'contentful';
 
 const getEntries = async <T>(query: string): Promise<EntryCollection<T>> => {
@@ -31,16 +35,9 @@ const isExperiment = (entry: Entry<any>): boolean => {
 };
 
 export const entryToExperienceConfiguration = (
-  entry: Entry<any>
+  entry: ExperienceEntry
 ): ExperienceConfiguration => {
-  return {
-    id: entry.sys.id,
-    type: entry.fields.nt_type,
-    audience: { id: entry.fields.nt_audience.sys.id },
-    trafficAllocation: entry.fields.nt_config.traffic,
-    distribution: entry.fields.nt_config.scatteredDistribution,
-    components: entry.fields.nt_config.components,
-  };
+  return ExperienceMapper.mapExperience(entry, { sys: { id: '' } });
 };
 
 export const getExperiencesOnPage = async (
@@ -55,7 +52,7 @@ export const getExperiencesOnPage = async (
 
   // Contentful doesn't type the 'includes' field
   // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-  return (page.includes.Entry as Entry<any>[])
+  return (page.includes.Entry as ExperienceEntry[])
     .filter(isExperience)
     .map(entryToExperienceConfiguration);
 };
@@ -70,7 +67,7 @@ export const getAllExperiments = async (): Promise<
 
   const allExperiences = await getEntries(allExperiencesQuery);
 
-  return allExperiences.items
+  return (allExperiences.items as ExperienceEntry[])
     .filter(isExperiment)
     .map(entryToExperienceConfiguration);
 };

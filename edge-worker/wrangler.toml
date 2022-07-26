@@ -8,4 +8,4 @@ route = "https://contentful-next-esr-demo.ninetailed.io/*"
 
 [vars]
 NINETAILED_API_KEY = '729c0659-366d-40f2-a556-8d16b1c8dc16'
-NINETAILED_ENVIRONMENT = 'main'
+NINETAILED_ENVIRONMENT = 'esr-experience-model'

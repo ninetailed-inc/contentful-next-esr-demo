@@ -505,6 +505,11 @@
     ts-toolbelt "^9.6.0"
     uuid "^8.3.2"
 
+"@ninetailed/experience.js-utils-contentful@^2.0.0-beta.24":
+  version "2.0.0-beta.24"
+  resolved "https://registry.yarnpkg.com/@ninetailed/experience.js-utils-contentful/-/experience.js-utils-contentful-2.0.0-beta.24.tgz#86ee00980edc5e2661d780afe01db2935f53051c"
+  integrity sha512-Z+rXekXlQxyZddF92XJAPwbe+wRhQJUYFmjv6u8hLhNACtdGGmihCfBwhSm3X+k4vCSl1PpeodBJmamRu37UlA==
+
 "@ninetailed/experience.js@2.0.0-beta.24", "@ninetailed/experience.js@^2.0.0-beta.24":
   version "2.0.0-beta.24"
   resolved "https://registry.yarnpkg.com/@ninetailed/experience.js/-/experience.js-2.0.0-beta.24.tgz#12c556fd41c519919eb481ea03399985899481d9"
