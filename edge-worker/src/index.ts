@@ -61,17 +61,17 @@ export default {
     newUrl.pathname = newUrl.pathname.replace(/\/$/, '');
     const newRequest = new Request(newUrl.href, request);
 
-    const response = (
-      await fetch(newRequest, {
-        cf: {
-          cacheTtl: 60,
-          cacheEverything: true,
-        },
-      })
-    ).clone();
+    const response = await fetch(newRequest, {
+      cf: {
+        cacheTtl: 60,
+        cacheEverything: true,
+      },
+    });
 
-    response.headers.append('Set-Cookie', `ntaid=${profile.id}`);
+    const newResponse = new Response(response.body, response);
 
-    return response;
+    newResponse.headers.append('Set-Cookie', `ntaid=${profile.id}`);
+
+    return newResponse;
   },
 };
