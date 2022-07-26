@@ -11,6 +11,10 @@ import {
 import { parse as parseLanguage } from 'accept-language-parser';
 import { v4 as uuid } from 'uuid';
 
+import {
+  ExperienceConfiguration,
+  selectDistribution,
+} from '@ninetailed/experience.js';
 import { NINETAILED_PROFILE_CACHE_COOKIE } from '@ninetailed/experience.js-plugin-ssr';
 
 const BASE_URL = 'https://api.ninetailed.co';
@@ -48,6 +52,18 @@ const getProfileCache = (cookies: Cookies): Cache => {
   }
 
   return buildEmptyCache();
+};
+
+export const getVariantIndex = (
+  experience: ExperienceConfiguration,
+  profile: Profile
+): number => {
+  const distribution = selectDistribution({
+    experience,
+    profile,
+  });
+
+  return distribution?.index ?? 0;
 };
 
 export const sendIdentify = async ({

@@ -2,14 +2,13 @@ import {
   isExperienceMatch,
   selectActiveExperiments,
   selectEligibleExperiences,
-  selectExperienceVariant,
 } from '@ninetailed/experience.js';
-import {} from '@ninetailed/experience.js-shared';
 import { getAllExperiments, getExperiencesOnPage } from './contentful';
 import {
   buildNinetailedEdgeRequestContext,
   EXPERIENCE_TRAIT_PREFIX,
   fetchEdgeProfile,
+  getVariantIndex,
   sendIdentify,
 } from './utils';
 
@@ -123,15 +122,14 @@ export default {
       ...matchingPersonalizations.map((experience) => {
         return {
           experienceId: experience.id,
-          variantIndex: 1,
+          variantIndex: getVariantIndex(experience, profile),
         };
       }),
       ...(firstExperiment
         ? [
             {
               experienceId: firstExperiment.id,
-              variantIndex: selectDistribution({ firstExperiment, profile })
-                .index,
+              variantIndex: getVariantIndex(firstExperiment, profile),
             },
           ]
         : []),
@@ -161,6 +159,7 @@ export default {
     ).clone();
 
     response.headers.append('Set-Cookie', `ntaid=${profile.id}`);
+    response.headers.append('Set-Cookie', `ntpc=${JSON.stringify(profile)}`);
 
     return response;
   },

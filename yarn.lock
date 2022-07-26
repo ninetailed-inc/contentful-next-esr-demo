@@ -415,16 +415,16 @@
   resolved "https://registry.yarnpkg.com/@next/swc-win32-x64-msvc/-/swc-win32-x64-msvc-12.1.6.tgz#a350caf42975e7197b24b495b8d764eec7e6a36e"
   integrity sha512-4ZEwiRuZEicXhXqmhw3+de8Z4EpOLQj/gp+D9fFWo6ii6W1kBkNNvvEx4A90ugppu+74pT1lIJnOuz3A9oQeJA==
 
-"@ninetailed/experience.js-next@^2.0.0-beta.22":
-  version "2.0.0-beta.22"
-  resolved "https://registry.yarnpkg.com/@ninetailed/experience.js-next/-/experience.js-next-2.0.0-beta.22.tgz#458166d0bcdfbcf4494c69f9ebaf4899fbc5fc36"
-  integrity sha512-R5W56o4e8BwFrIWvb8oHQytB9sTTUD0poCsniVz7Ygx4iPa9c89wvHgfhwUi44D9i/TtrmUz1h21nLN0zhoTMg==
+"@ninetailed/experience.js-next@^2.0.0-beta.24":
+  version "2.0.0-beta.24"
+  resolved "https://registry.yarnpkg.com/@ninetailed/experience.js-next/-/experience.js-next-2.0.0-beta.24.tgz#aa260b3e8d50e1520af42bee1d586f8ddaf39bef"
+  integrity sha512-YpH7XkViandDEXnub1AOIrutOYzICRrcQ2w42+DqQpiXR+gFXrDaBwFnwy/w1TENYBEZe6Iw3okDEoZMELD4Pw==
   dependencies:
     "@analytics/google-analytics" "^0.5.3"
-    "@ninetailed/experience.js" "2.0.0-beta.22"
-    "@ninetailed/experience.js-plugin-ssr" "2.0.0-beta.22"
-    "@ninetailed/experience.js-react" "2.0.0-beta.22"
-    "@ninetailed/experience.js-shared" "2.0.0-beta.22"
+    "@ninetailed/experience.js" "2.0.0-beta.24"
+    "@ninetailed/experience.js-plugin-ssr" "2.0.0-beta.24"
+    "@ninetailed/experience.js-react" "2.0.0-beta.24"
+    "@ninetailed/experience.js-shared" "2.0.0-beta.24"
     analytics "^0.8.0"
     i18n-iso-countries "^7.3.0"
     js-cookie "^3.0.1"
@@ -437,14 +437,14 @@
     ts-toolbelt "^9.6.0"
     uuid "^8.3.2"
 
-"@ninetailed/experience.js-plugin-preview@^2.0.0-beta.20":
-  version "2.0.0-beta.22"
-  resolved "https://registry.yarnpkg.com/@ninetailed/experience.js-plugin-preview/-/experience.js-plugin-preview-2.0.0-beta.22.tgz#36327417d8852580f39b25f54fe6c66170e01260"
-  integrity sha512-d0OCyqLjDWgqqeaM26Mre5jezaKTJmrS3zn03/5jDuAoe185LHvQ4oJ7OCujo7x0Px1dmTdM8BRdsh4oJ/5N/g==
+"@ninetailed/experience.js-plugin-preview@^2.0.0-beta.24":
+  version "2.0.0-beta.24"
+  resolved "https://registry.yarnpkg.com/@ninetailed/experience.js-plugin-preview/-/experience.js-plugin-preview-2.0.0-beta.24.tgz#c6f42586721696964f1129d4f1314f3d3061c539"
+  integrity sha512-BxYHiRZElxCIX4Op+4xjcfZNQQNaBXZBZYB7Rw5GBVgGIHDupdxGEPxiy1pG86rJSkFqSm5qzT2Tdi3fLbdnQw==
   dependencies:
-    "@ninetailed/experience.js" "2.0.0-beta.22"
-    "@ninetailed/experience.js-preview-bridge" "2.0.0-beta.22"
-    "@ninetailed/experience.js-shared" "2.0.0-beta.22"
+    "@ninetailed/experience.js" "2.0.0-beta.24"
+    "@ninetailed/experience.js-preview-bridge" "2.0.0-beta.24"
+    "@ninetailed/experience.js-shared" "2.0.0-beta.24"
     analytics "^0.8.0"
     i18n-iso-countries "^7.3.0"
     locale-enum "^1.1.1"
@@ -455,12 +455,12 @@
     uuid "^8.3.2"
     zoid "^9.0.86"
 
-"@ninetailed/experience.js-plugin-ssr@2.0.0-beta.22", "@ninetailed/experience.js-plugin-ssr@^2.0.0-beta.20":
-  version "2.0.0-beta.22"
-  resolved "https://registry.yarnpkg.com/@ninetailed/experience.js-plugin-ssr/-/experience.js-plugin-ssr-2.0.0-beta.22.tgz#3b2e556e9557740d27ffebcdd6c891809c3d100b"
-  integrity sha512-mLFJN8qRsLc0gIy+nkcsw1wTz7vA0A46Eo4zuD4A00FWXrAV6mdY0+OFJq5Cndr1Zk3oRppWiXYKpj2h2LXMeQ==
+"@ninetailed/experience.js-plugin-ssr@2.0.0-beta.24", "@ninetailed/experience.js-plugin-ssr@^2.0.0-beta.24":
+  version "2.0.0-beta.24"
+  resolved "https://registry.yarnpkg.com/@ninetailed/experience.js-plugin-ssr/-/experience.js-plugin-ssr-2.0.0-beta.24.tgz#34c9ef00f5f654d47e4897fc83b9d9bfe7363bee"
+  integrity sha512-pdJqm7IeDI0sWLJxyEQmjypGgCGhDpAR9R5FLPrloUiaGlZQ6aWBfixyFIIQdt8egVQx+6bU5L3QiyW2GW0byQ==
   dependencies:
-    "@ninetailed/experience.js-shared" "2.0.0-beta.22"
+    "@ninetailed/experience.js-shared" "2.0.0-beta.24"
     analytics "^0.8.0"
     i18n-iso-countries "^7.3.0"
     js-cookie "^3.0.1"
@@ -469,21 +469,21 @@
     ts-toolbelt "^9.6.0"
     uuid "^8.3.2"
 
-"@ninetailed/experience.js-preview-bridge@2.0.0-beta.22":
-  version "2.0.0-beta.22"
-  resolved "https://registry.yarnpkg.com/@ninetailed/experience.js-preview-bridge/-/experience.js-preview-bridge-2.0.0-beta.22.tgz#f288b9833d49af2d81798072f61760f1d4a9780a"
-  integrity sha512-kuro0iXDZ56K6S4J44H1W7dYmSrIuVUobS5icfJrWPCRR31MMrchR8yqWGBUt38iT2PsZ5XS3H7ippDwx70TGw==
+"@ninetailed/experience.js-preview-bridge@2.0.0-beta.24":
+  version "2.0.0-beta.24"
+  resolved "https://registry.yarnpkg.com/@ninetailed/experience.js-preview-bridge/-/experience.js-preview-bridge-2.0.0-beta.24.tgz#88af384bc35745c02aee2f20d1470e4242687b66"
+  integrity sha512-42Dj4osZjmaIwvANBUoC22Q+2hBXnj2HLhYnQpcFBi8NiwhfME0Wsy/StRU6WWwXyXKdlwPTx+9Qg9sfqUGodw==
   dependencies:
     zoid "^9.0.86"
 
-"@ninetailed/experience.js-react@2.0.0-beta.22":
-  version "2.0.0-beta.22"
-  resolved "https://registry.yarnpkg.com/@ninetailed/experience.js-react/-/experience.js-react-2.0.0-beta.22.tgz#5ea63bd6992f80bf8d5395bd196c21c88b54045a"
-  integrity sha512-i2V+xvQGH+TSTy+mrEjZOCQBA/pIykA/mbr5gNWm9aB1l75MnRsQ4ShhBoPGQwV6fCq2Nlh4s69fK2xsk5aIqA==
+"@ninetailed/experience.js-react@2.0.0-beta.24":
+  version "2.0.0-beta.24"
+  resolved "https://registry.yarnpkg.com/@ninetailed/experience.js-react/-/experience.js-react-2.0.0-beta.24.tgz#acdf5fd1099cc611a4b185403935c731bc354e61"
+  integrity sha512-iekpsx5bPKxG6r6zS5hrzlilgi/6VCNd10pGMc+OQNqGgzW8CoBUP6CwRF7KjRKWdFDwBhcbLxocOdDpC+LuBw==
   dependencies:
     "@analytics/google-analytics" "0.5.3"
-    "@ninetailed/experience.js" "2.0.0-beta.22"
-    "@ninetailed/experience.js-shared" "2.0.0-beta.22"
+    "@ninetailed/experience.js" "2.0.0-beta.24"
+    "@ninetailed/experience.js-shared" "2.0.0-beta.24"
     analytics "^0.8.0"
     i18n-iso-countries "^7.3.0"
     locale-enum "^1.1.1"
@@ -495,22 +495,22 @@
     ts-toolbelt "^9.6.0"
     uuid "^8.3.2"
 
-"@ninetailed/experience.js-shared@2.0.0-beta.22", "@ninetailed/experience.js-shared@^2.0.0-beta.22":
-  version "2.0.0-beta.22"
-  resolved "https://registry.yarnpkg.com/@ninetailed/experience.js-shared/-/experience.js-shared-2.0.0-beta.22.tgz#8e77ecb30d32c53c22897b1048636aebd212021e"
-  integrity sha512-pJWA7DLUu7Oqy7u4IQeO/eR7WpMRxvTVb2uSfB3lHwQQeh/p+y/zb9wubzabWqxyMzAXHxKwfGrPCD523CA2LA==
+"@ninetailed/experience.js-shared@2.0.0-beta.24", "@ninetailed/experience.js-shared@^2.0.0-beta.24":
+  version "2.0.0-beta.24"
+  resolved "https://registry.yarnpkg.com/@ninetailed/experience.js-shared/-/experience.js-shared-2.0.0-beta.24.tgz#6e0cd55affc6da19db9c01e1f5ef9b92e9f0d41f"
+  integrity sha512-srGSUu0uTBRJLaY7IXiLuT3q0Yv7BK2JZ9UgjeSSbHOVJDzi91Rm5y53jQ4glhtvX/zKZxsjH5kCqaBZe9+iEg==
   dependencies:
     i18n-iso-countries "^7.3.0"
     locale-enum "^1.1.1"
     ts-toolbelt "^9.6.0"
     uuid "^8.3.2"
 
-"@ninetailed/experience.js@2.0.0-beta.22", "@ninetailed/experience.js@^2.0.0-beta.22":
-  version "2.0.0-beta.22"
-  resolved "https://registry.yarnpkg.com/@ninetailed/experience.js/-/experience.js-2.0.0-beta.22.tgz#ddaee404323367e58c0c1fdac652c0db043b4fa4"
-  integrity sha512-47a9MKiEGWczPSZB34PGdwcrGuRZh+eCERT0YFV7VILqZBU35iehIcyQ5FqULFmWZgSISZltr6oVTuQJPmaYbw==
+"@ninetailed/experience.js@2.0.0-beta.24", "@ninetailed/experience.js@^2.0.0-beta.24":
+  version "2.0.0-beta.24"
+  resolved "https://registry.yarnpkg.com/@ninetailed/experience.js/-/experience.js-2.0.0-beta.24.tgz#12c556fd41c519919eb481ea03399985899481d9"
+  integrity sha512-DDpizA+mdPFiIYjdMbzvpO5+Neacf/SIZ22z9AC+vgxslP6s9DZDneQNb/Qp3BCu5/BhFDj9J1/lMDlBYQkmIw==
   dependencies:
-    "@ninetailed/experience.js-shared" "2.0.0-beta.22"
+    "@ninetailed/experience.js-shared" "2.0.0-beta.24"
     analytics "^0.8.0"
     i18n-iso-countries "^7.3.0"
     locale-enum "^1.1.1"
