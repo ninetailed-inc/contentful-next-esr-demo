@@ -2,10 +2,16 @@ import React from 'react';
 import * as Contentful from 'contentful';
 import get from 'lodash/get';
 import {
-  Personalize,
+  Experience,
   Variant,
   PersonalizedComponent,
+  ExperienceComponent,
+  ESRLoadingComponent,
 } from '@ninetailed/experience.js-next';
+import {
+  ExperienceEntry,
+  ExperienceMapper,
+} from '@ninetailed/experience.js-utils-contentful';
 
 import { Hero } from '@/components/Hero';
 import { CTA } from '@/components/Cta';
@@ -37,9 +43,10 @@ type PersonalizedFields<T> = T & {
       id: Contentful.EntryFields.Symbol;
     }>;
   }>[];
+  nt_experiences?: ExperienceEntry[];
 };
 
-type Block = Contentful.Entry<PersonalizedFields<any>> & {
+type Block = Contentful.Entry<PersonalizedFields<unknown>> & {
   parent?: Contentful.Entry<any>;
 };
 
@@ -47,22 +54,20 @@ type BlockRendererProps = {
   block: Block | Block[];
 };
 
-const unwrapVariants = (
-  block: Contentful.Entry<PersonalizedFields<Block>>
-): Variant<any>[] => {
-  return (block.fields.nt_variants || [])
-    .filter((variant) => {
-      return !!variant.fields?.nt_audience;
-    })
-    .map((variant) => {
-      return {
-        id: variant.sys.id,
-        audience: {
-          id: variant.fields.nt_audience?.sys.id,
-        },
-        ...variant,
-      };
-    });
+type ComponentRendererProps = Contentful.Entry<unknown>;
+
+const ComponentRenderer: React.FC<ComponentRendererProps> = (props) => {
+  const contentTypeId = get(props, 'sys.contentType.sys.id') as string;
+  const Component = ContentTypeMap[contentTypeId];
+
+  if (!Component) {
+    console.warn(`${contentTypeId} can not be handled`);
+    return null;
+  }
+
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  return <Component {...props} />;
 };
 
 const BlockRenderer = ({ block }: BlockRendererProps) => {
@@ -90,13 +95,24 @@ const BlockRenderer = ({ block }: BlockRendererProps) => {
     ...block,
     parent: block.parent,
   };
+
+  const experiences = (componentProps.fields.nt_experiences || []).map(
+    (experience) => {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+      return ExperienceMapper.mapExperience(experience, componentProps);
+    }
+  );
+
   return (
     <div key={`${contentTypeId}-${id}`}>
-      <Personalize
+      <Experience
         {...componentProps}
         id={componentProps.sys.id}
-        component={Component as PersonalizedComponent<any>}
-        variants={unwrapVariants(componentProps)}
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        component={ComponentRenderer}
+        experiences={experiences}
+        loadingComponent={ESRLoadingComponent}
       />
     </div>
   );

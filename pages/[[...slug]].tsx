@@ -2,13 +2,21 @@ import { GetStaticPaths, GetStaticProps } from 'next';
 import { NextSeo } from 'next-seo';
 import get from 'lodash/get';
 
-import { useProfile } from '@ninetailed/experience.js-next';
+import {
+  decodeExperienceVariantsMap,
+  useProfile,
+} from '@ninetailed/experience.js-next';
 import { BlockRenderer } from '@/components/Renderer';
 import { getPagesOfType, getPage } from '@/lib/api';
 import { PAGE_CONTENT_TYPES } from '@/lib/constants';
 import { IPage } from '@/types/contentful';
 
-const Page = ({ page }: { page: IPage }) => {
+export type IPageProps = {
+  page: IPage;
+  ninetailed: { experienceVariantsMap: Record<string, number> };
+};
+
+const Page = ({ page, ninetailed }: IPageProps) => {
   const { profile: userProfile } = useProfile();
   console.log({ 'APP:UserProfile': userProfile });
   if (!page) {
@@ -42,20 +50,13 @@ const Page = ({ page }: { page: IPage }) => {
   );
 };
 export const getStaticProps: GetStaticProps = async ({ params, preview }) => {
-  console.log({ 'SLUG:params': params });
-
   const rawSlug = get(params, 'slug', []) as string[];
-
-  console.log({ 'SLUG:rawSlug': rawSlug });
-
-  const audiencesSlug = rawSlug[0] || '';
-  console.log({ 'SLUG:audiencesSlug': audiencesSlug });
-  const isPersonalized = audiencesSlug.startsWith(';');
-  const audiences = isPersonalized
-    ? audiencesSlug.split(';')[1].split(',')
-    : [];
+  const experienceVariantsSlug = rawSlug[0] || '';
+  const isPersonalized = experienceVariantsSlug.startsWith(';');
+  const experienceVariantsMap = isPersonalized
+    ? decodeExperienceVariantsMap(experienceVariantsSlug.split(';')[1])
+    : {};
   const slug = isPersonalized ? rawSlug.slice(1).join('/') : rawSlug.join('/');
-  console.log({ 'SLUG:slug': slug });
   const page = await getPage({
     preview,
     slug: slug === '' ? '/' : slug,
@@ -64,7 +65,7 @@ export const getStaticProps: GetStaticProps = async ({ params, preview }) => {
   });
   /* console.log({ 'SLUG:page': page }); */
   return {
-    props: { page, ninetailed: { audiences } },
+    props: { page, ninetailed: { experienceVariantsMap } },
     revalidate: 5,
   };
 };
