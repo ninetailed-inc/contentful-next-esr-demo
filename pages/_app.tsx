@@ -46,7 +46,7 @@ const ESRDemoApp = ({ Component, pageProps }: AppProps) => {
         clientId={process.env.NEXT_PUBLIC_NINETAILED_CLIENT_ID ?? ''}
         environment={process.env.NEXT_PUBLIC_NINETAILED_ENVIRONMENT ?? 'main'}
       >
-        <ESRProvider experienceVariantsMap={ninetailed.experienceVariantsMap}>
+        <ESRProvider experienceVariantsMap={ninetailed?.experienceVariantsMap}>
           <Component {...pageProps} />
         </ESRProvider>
       </NinetailedProvider>
