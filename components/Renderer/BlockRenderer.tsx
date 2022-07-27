@@ -96,7 +96,7 @@ const BlockRenderer = ({ block }: BlockRendererProps) => {
   const experiences = (componentProps.fields.nt_experiences || []).map(
     (experience) => {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-      return ExperienceMapper.mapExperience(experience, componentProps);
+      return ExperienceMapper.mapExperience(experience);
     }
   );
 

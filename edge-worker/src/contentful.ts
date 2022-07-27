@@ -37,7 +37,7 @@ const isExperiment = (entry: Entry<any>): boolean => {
 export const entryToExperienceConfiguration = (
   entry: ExperienceEntry
 ): ExperienceConfiguration => {
-  return ExperienceMapper.mapExperience(entry, { sys: { id: '' } });
+  return ExperienceMapper.mapExperience(entry);
 };
 
 export const getExperiencesOnPage = async (

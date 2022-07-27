@@ -151,14 +151,12 @@ export default {
 
     console.log(newUrl.href);
 
-    const response = (
-      await fetch(newRequest, {
-        cf: {
-          cacheTtl: 60,
-          cacheEverything: true,
-        },
-      })
-    );
+    const response = await fetch(newRequest, {
+      cf: {
+        cacheTtl: 60,
+        cacheEverything: true,
+      },
+    });
     const newResponse = new Response(response.body, response);
 
     newResponse.headers.append('Set-Cookie', `ntaid=${profile.id}`);
