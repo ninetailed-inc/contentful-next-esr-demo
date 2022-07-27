@@ -33,12 +33,20 @@ const Page = ({ page }: { page: IPage }) => {
         noindex={page.fields.seo?.fields.no_index as boolean}
       />
       <div className="w-full">
+        {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+        {/* @ts-ignore */}
         {banner && <BlockRenderer block={banner} />}
+        {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+        {/* @ts-ignore */}
         {navigation && <BlockRenderer block={navigation} />}
         <main>
+          {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+          {/* @ts-ignore */}
           <BlockRenderer block={sections} />
         </main>
 
+        {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+        {/* @ts-ignore */}
         {footer && <BlockRenderer block={footer} />}
       </div>
     </>
