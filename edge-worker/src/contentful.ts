@@ -48,6 +48,7 @@ export const getExperiencesOnPage = async (
 
   const pageQuery = `content_type=${pageContentTypeId}&fields.slug=${slug}&limit=1&include=10`;
 
+  // TODO: add caching
   const page = await getEntries(pageQuery);
 
   // Contentful doesn't type the 'includes' field
@@ -65,6 +66,7 @@ export const getAllExperiments = async (): Promise<
 
   const allExperiencesQuery = `content_type=${experienceContentTypeId}`;
 
+  // TODO: add caching
   const allExperiences = await getEntries(allExperiencesQuery);
 
   return (allExperiences.items as ExperienceEntry[])

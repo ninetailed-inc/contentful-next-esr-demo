@@ -151,6 +151,7 @@ export default {
 
     console.log(newUrl.href);
 
+    // TODO: add stale while revalidate caching
     const response = await fetch(newRequest, {
       cf: {
         cacheTtl: 60,

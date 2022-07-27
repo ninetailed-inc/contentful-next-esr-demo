@@ -88,58 +88,10 @@ export const getStaticPaths: GetStaticPaths = async () => {
         params: { slug: page.fields.slug.split('/') },
       };
     });
-  /* console.log({ 'SLUG:paths': JSON.stringify(paths) }); */
-  /* return {
-    paths: [
-      { params: { slug: [''] } },
-      { params: { slug: [';7IRVaTD9GpZVprP7A8tSiE', 'pricing'] } },
-    ],
-    fallback: true,
-  }; */
-  /* return {
-    paths: [{ params: { slug: [''] } }, { params: { slug: ['pricing'] } }],
-    fallback: true,
-  }; */
   return {
     paths: [...paths, { params: { slug: [''] } }],
     fallback: 'blocking',
   };
 };
-
-/* export const getStaticProps: GetStaticProps = async ({ params, preview }) => {
-  const rawSlug = get(params, 'slug', []) as string[];
-  const slug = rawSlug.join('/');
-  const page = await getPage({
-    preview,
-    slug: slug === '' ? '/' : slug,
-    pageContentType: PAGE_CONTENT_TYPES.PAGE,
-    childPageContentType: PAGE_CONTENT_TYPES.LANDING_PAGE,
-  });
-  return {
-    props: { page },
-    revalidate: 5,
-  };
-};
-
-export const getStaticPaths: GetStaticPaths = async () => {
-  const pages = await getPagesOfType({
-    pageContentType: PAGE_CONTENT_TYPES.PAGE,
-    childPageContentType: PAGE_CONTENT_TYPES.LANDING_PAGE,
-  });
-
-  const paths = pages
-    .filter((page) => {
-      return page.fields.slug !== '/';
-    })
-    .map((page) => {
-      return {
-        params: { slug: page.fields.slug.split('/') },
-      };
-    });
-  return {
-    paths: [...paths, { params: { slug: [''] } }],
-    fallback: true,
-  };
-}; */
 
 export default Page;
