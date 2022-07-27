@@ -158,11 +158,12 @@ export default {
           cacheEverything: true,
         },
       })
-    ).clone();
+    );
+    const newResponse = new Response(response.body, response);
 
-    response.headers.append('Set-Cookie', `ntaid=${profile.id}`);
-    response.headers.append('Set-Cookie', `ntpc=${JSON.stringify(cache)}`);
+    newResponse.headers.append('Set-Cookie', `ntaid=${profile.id}`);
+    newResponse.headers.append('Set-Cookie', `ntpc=${JSON.stringify(cache)}`);
 
-    return response;
+    return newResponse;
   },
 };
