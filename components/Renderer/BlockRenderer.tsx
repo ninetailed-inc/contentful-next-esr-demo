@@ -1,21 +1,24 @@
-import React from 'react';
+import {
+  ESRLoadingComponent,
+  Experience,
+} from '@ninetailed/experience.js-next';
+import {
+  ExperienceEntry,
+  ExperienceMapper,
+} from '@ninetailed/experience.js-utils-contentful';
 import * as Contentful from 'contentful';
 import get from 'lodash/get';
-import {
-  Personalize,
-  Variant,
-  PersonalizedComponent,
-} from '@ninetailed/experience.js-next';
+import React from 'react';
 
-import { Hero } from '@/components/Hero';
+import { Banner } from '@/components/Banner';
 import { CTA } from '@/components/Cta';
 import { Feature } from '@/components/Feature';
-import { Banner } from '@/components/Banner';
-import { Navigation } from '@/components/Navigation';
 import { Footer } from '@/components/Footer';
-import { PricingTable } from '@/components/PricingTable';
-import { PricingPlan } from '@/components/PricingPlan';
 import { Form } from '@/components/Form';
+import { Hero } from '@/components/Hero';
+import { Navigation } from '@/components/Navigation';
+import { PricingPlan } from '@/components/PricingPlan';
+import { PricingTable } from '@/components/PricingTable';
 
 import { ComponentContentTypes } from '@/lib/constants';
 
@@ -37,9 +40,10 @@ type PersonalizedFields<T> = T & {
       id: Contentful.EntryFields.Symbol;
     }>;
   }>[];
+  nt_experiences?: ExperienceEntry[];
 };
 
-type Block = Contentful.Entry<PersonalizedFields<any>> & {
+type Block = Contentful.Entry<PersonalizedFields<unknown>> & {
   parent?: Contentful.Entry<any>;
 };
 
@@ -47,22 +51,20 @@ type BlockRendererProps = {
   block: Block | Block[];
 };
 
-const unwrapVariants = (
-  block: Contentful.Entry<PersonalizedFields<Block>>
-): Variant<any>[] => {
-  return (block.fields.nt_variants || [])
-    .filter((variant) => {
-      return !!variant.fields?.nt_audience;
-    })
-    .map((variant) => {
-      return {
-        id: variant.sys.id,
-        audience: {
-          id: variant.fields.nt_audience?.sys.id,
-        },
-        ...variant,
-      };
-    });
+type ComponentRendererProps = Contentful.Entry<unknown>;
+
+const ComponentRenderer: React.FC<ComponentRendererProps> = (props) => {
+  const contentTypeId = get(props, 'sys.contentType.sys.id') as string;
+  const Component = ContentTypeMap[contentTypeId];
+
+  if (!Component) {
+    console.warn(`${contentTypeId} can not be handled`);
+    return null;
+  }
+
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  return <Component {...props} />;
 };
 
 const BlockRenderer = ({ block }: BlockRendererProps) => {
@@ -90,13 +92,24 @@ const BlockRenderer = ({ block }: BlockRendererProps) => {
     ...block,
     parent: block.parent,
   };
+
+  const experiences = (componentProps.fields.nt_experiences || []).map(
+    (experience) => {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+      return ExperienceMapper.mapExperience(experience);
+    }
+  );
+
   return (
     <div key={`${contentTypeId}-${id}`}>
-      <Personalize
+      <Experience
         {...componentProps}
         id={componentProps.sys.id}
-        component={Component as PersonalizedComponent<any>}
-        variants={unwrapVariants(componentProps)}
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        component={ComponentRenderer}
+        experiences={experiences}
+        loadingComponent={ESRLoadingComponent}
       />
     </div>
   );

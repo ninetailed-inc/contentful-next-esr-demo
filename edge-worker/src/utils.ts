@@ -1,18 +1,24 @@
-import { v4 as uuid } from 'uuid';
 import {
-  IngestProfileEventsResponseBody,
-  Profile,
-  GeoLocation,
-  NinetailedRequestContext,
+  buildEmptyCache,
+  buildIdentifyEvent,
   buildPageEvent,
   Cache,
-  buildEmptyCache,
+  GeoLocation,
+  NinetailedRequestContext,
+  Profile,
+  Traits,
 } from '@ninetailed/experience.js-shared';
 import { parse as parseLanguage } from 'accept-language-parser';
+import { v4 as uuid } from 'uuid';
 
+import {
+  ExperienceConfiguration,
+  selectDistribution,
+} from '@ninetailed/experience.js';
 import { NINETAILED_PROFILE_CACHE_COOKIE } from '@ninetailed/experience.js-plugin-ssr';
 
 const BASE_URL = 'https://api.ninetailed.co';
+export const EXPERIENCE_TRAIT_PREFIX = 'nt_experiment_';
 
 type Cookies = { [key: string]: string };
 
@@ -24,6 +30,14 @@ type GetServerSideProfileOptions = {
   url?: string;
   ip?: string;
   location?: GeoLocation;
+};
+
+type SendIdentifyOptions = {
+  ctx: NinetailedRequestContext;
+  traits: Traits;
+  cookies: Cookies;
+  clientId: string;
+  environment?: string;
 };
 
 const getProfileCache = (cookies: Cookies): Cache => {
@@ -38,6 +52,54 @@ const getProfileCache = (cookies: Cookies): Cache => {
   }
 
   return buildEmptyCache();
+};
+
+export const getVariantIndex = (
+  experience: ExperienceConfiguration,
+  profile: Profile
+): number => {
+  const distribution = selectDistribution({
+    experience,
+    profile,
+  });
+
+  return distribution?.index ?? 0;
+};
+
+export const sendIdentify = async ({
+  ctx,
+  cookies,
+  traits,
+  clientId,
+  environment,
+}: SendIdentifyOptions) => {
+  const cacheFromCookie = getProfileCache(cookies);
+  const anonymousId = cacheFromCookie.id;
+
+  const identifyEvent = buildIdentifyEvent({
+    traits,
+    anonymousId,
+    ctx,
+    messageId: uuid(),
+    timestamp: Date.now(),
+    userId: '',
+  });
+
+  await fetch(
+    `${BASE_URL}/v1/organizations/${clientId}/environments/${
+      environment || 'main'
+    }/profiles/${anonymousId}/events`,
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        events: [identifyEvent],
+        ...cacheFromCookie,
+      }),
+    }
+  );
 };
 
 export const fetchEdgeProfile = async ({
@@ -84,7 +146,7 @@ export const fetchEdgeProfile = async ({
 
   const {
     data: { profile, traitsUpdatedAt, signals },
-  } = (await request.json()) as IngestProfileEventsResponseBody;
+  } = await request.json();
 
   return {
     profile,

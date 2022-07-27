@@ -2,7 +2,10 @@ import { GetStaticPaths, GetStaticProps } from 'next';
 import { NextSeo } from 'next-seo';
 import get from 'lodash/get';
 
-import { useProfile } from '@ninetailed/experience.js-next';
+import {
+  decodeExperienceVariantsMap,
+  useProfile,
+} from '@ninetailed/experience.js-next';
 import { BlockRenderer } from '@/components/Renderer';
 import { getPagesOfType, getPage } from '@/lib/api';
 import { PAGE_CONTENT_TYPES } from '@/lib/constants';
@@ -30,32 +33,33 @@ const Page = ({ page }: { page: IPage }) => {
         noindex={page.fields.seo?.fields.no_index as boolean}
       />
       <div className="w-full">
+        {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+        {/* @ts-ignore */}
         {banner && <BlockRenderer block={banner} />}
+        {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+        {/* @ts-ignore */}
         {navigation && <BlockRenderer block={navigation} />}
         <main>
+          {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+          {/* @ts-ignore */}
           <BlockRenderer block={sections} />
         </main>
 
+        {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+        {/* @ts-ignore */}
         {footer && <BlockRenderer block={footer} />}
       </div>
     </>
   );
 };
 export const getStaticProps: GetStaticProps = async ({ params, preview }) => {
-  console.log({ 'SLUG:params': params });
-
   const rawSlug = get(params, 'slug', []) as string[];
-
-  console.log({ 'SLUG:rawSlug': rawSlug });
-
-  const audiencesSlug = rawSlug[0] || '';
-  console.log({ 'SLUG:audiencesSlug': audiencesSlug });
-  const isPersonalized = audiencesSlug.startsWith(';');
-  const audiences = isPersonalized
-    ? audiencesSlug.split(';')[1].split(',')
-    : [];
+  const experienceVariantsSlug = rawSlug[0] || '';
+  const isPersonalized = experienceVariantsSlug.startsWith(';');
+  const experienceVariantsMap = isPersonalized
+    ? decodeExperienceVariantsMap(experienceVariantsSlug.split(';')[1])
+    : {};
   const slug = isPersonalized ? rawSlug.slice(1).join('/') : rawSlug.join('/');
-  console.log({ 'SLUG:slug': slug });
   const page = await getPage({
     preview,
     slug: slug === '' ? '/' : slug,
@@ -64,7 +68,7 @@ export const getStaticProps: GetStaticProps = async ({ params, preview }) => {
   });
   /* console.log({ 'SLUG:page': page }); */
   return {
-    props: { page, ninetailed: { audiences } },
+    props: { page, ninetailed: { experienceVariantsMap } },
     revalidate: 5,
   };
 };
@@ -84,58 +88,10 @@ export const getStaticPaths: GetStaticPaths = async () => {
         params: { slug: page.fields.slug.split('/') },
       };
     });
-  /* console.log({ 'SLUG:paths': JSON.stringify(paths) }); */
-  /* return {
-    paths: [
-      { params: { slug: [''] } },
-      { params: { slug: [';7IRVaTD9GpZVprP7A8tSiE', 'pricing'] } },
-    ],
-    fallback: true,
-  }; */
-  /* return {
-    paths: [{ params: { slug: [''] } }, { params: { slug: ['pricing'] } }],
-    fallback: true,
-  }; */
   return {
     paths: [...paths, { params: { slug: [''] } }],
     fallback: 'blocking',
   };
 };
-
-/* export const getStaticProps: GetStaticProps = async ({ params, preview }) => {
-  const rawSlug = get(params, 'slug', []) as string[];
-  const slug = rawSlug.join('/');
-  const page = await getPage({
-    preview,
-    slug: slug === '' ? '/' : slug,
-    pageContentType: PAGE_CONTENT_TYPES.PAGE,
-    childPageContentType: PAGE_CONTENT_TYPES.LANDING_PAGE,
-  });
-  return {
-    props: { page },
-    revalidate: 5,
-  };
-};
-
-export const getStaticPaths: GetStaticPaths = async () => {
-  const pages = await getPagesOfType({
-    pageContentType: PAGE_CONTENT_TYPES.PAGE,
-    childPageContentType: PAGE_CONTENT_TYPES.LANDING_PAGE,
-  });
-
-  const paths = pages
-    .filter((page) => {
-      return page.fields.slug !== '/';
-    })
-    .map((page) => {
-      return {
-        params: { slug: page.fields.slug.split('/') },
-      };
-    });
-  return {
-    paths: [...paths, { params: { slug: [''] } }],
-    fallback: true,
-  };
-}; */
 
 export default Page;
