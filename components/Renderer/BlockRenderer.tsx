@@ -1,27 +1,24 @@
-import React from 'react';
-import * as Contentful from 'contentful';
-import get from 'lodash/get';
 import {
-  Experience,
-  Variant,
-  PersonalizedComponent,
-  ExperienceComponent,
   ESRLoadingComponent,
+  Experience,
 } from '@ninetailed/experience.js-next';
 import {
   ExperienceEntry,
   ExperienceMapper,
 } from '@ninetailed/experience.js-utils-contentful';
+import * as Contentful from 'contentful';
+import get from 'lodash/get';
+import React from 'react';
 
-import { Hero } from '@/components/Hero';
+import { Banner } from '@/components/Banner';
 import { CTA } from '@/components/Cta';
 import { Feature } from '@/components/Feature';
-import { Banner } from '@/components/Banner';
-import { Navigation } from '@/components/Navigation';
 import { Footer } from '@/components/Footer';
-import { PricingTable } from '@/components/PricingTable';
-import { PricingPlan } from '@/components/PricingPlan';
 import { Form } from '@/components/Form';
+import { Hero } from '@/components/Hero';
+import { Navigation } from '@/components/Navigation';
+import { PricingPlan } from '@/components/PricingPlan';
+import { PricingTable } from '@/components/PricingTable';
 
 import { ComponentContentTypes } from '@/lib/constants';
 
