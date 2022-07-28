@@ -6,6 +6,7 @@ import {
 import { getAllExperiments, getExperiencesOnPage } from './contentful';
 import {
   buildNinetailedEdgeRequestContext,
+  CachedFetcher,
   EXPERIENCE_TRAIT_PREFIX,
   fetchEdgeProfile,
   getVariantIndex,
@@ -151,13 +152,11 @@ export default {
 
     console.log(newUrl.href);
 
-    // TODO: add stale while revalidate caching
-    const response = await fetch(newRequest, {
-      cf: {
-        cacheTtl: 60,
-        cacheEverything: true,
-      },
+    const cachedFetcher = new CachedFetcher({
+      context,
+      defaultTtl: 5,
     });
+    const response = await cachedFetcher.fetch(newRequest);
     const newResponse = new Response(response.body, response);
 
     newResponse.headers.append('Set-Cookie', `ntaid=${profile.id}`);

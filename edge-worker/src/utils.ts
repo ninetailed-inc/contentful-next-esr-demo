@@ -187,3 +187,63 @@ export const buildNinetailedEdgeRequestContext = (
     userAgent: request.headers.get('user-agent') || '',
   };
 };
+
+export type CachedFetcherProps = {
+  context: ExecutionContext;
+  defaultTtl: number;
+};
+export class CachedFetcher {
+  private readonly context: ExecutionContext;
+
+  private readonly defaultTtl: number;
+
+  constructor({ context, defaultTtl }: CachedFetcherProps) {
+    this.context = context;
+    this.defaultTtl = defaultTtl;
+  }
+
+  async fetch(request: Request, ttl?: number): Promise<Response> {
+    const cacheTtl = ttl ?? this.defaultTtl;
+
+    const cache = caches.default;
+    const cachedResponse = await cache.match(request.url);
+
+    if (!cachedResponse) {
+      console.log(`cache miss ${request.url}`);
+      return CachedFetcher.fetchAndCacheResponse(request);
+    }
+    console.log(`cache hit ${request.url}`);
+
+    const cacheTimestamp = cachedResponse.headers.get('Cache-Timestamp');
+    const cacheAge = (Date.now() - Number(cacheTimestamp)) / 1000;
+    const stale = !cacheTimestamp || cacheAge > cacheTtl;
+
+    console.log(
+      `cache age: ${cacheAge} | ttl: ${cacheTtl} | stale: ${stale.toString()}`
+    );
+
+    if (stale) {
+      this.context.waitUntil(CachedFetcher.fetchAndCacheResponse(request));
+    }
+
+    return cachedResponse;
+  }
+
+  private static fetchAndCacheResponse = async (
+    request: Request
+  ): Promise<Response> => {
+    const cache = caches.default;
+    const response = await fetch(request);
+    const clonedResponse = response.clone();
+    const responseToCache = new Response(clonedResponse.body, clonedResponse);
+    // add a timestamp header to the response to be used for cache revalidation
+    responseToCache.headers.append('Cache-Timestamp', String(Date.now()));
+    responseToCache.headers.set(
+      'Cache-Control',
+      `s-maxage=${60 * 60 * 24 * 365}`
+    );
+    await cache.put(request.url, responseToCache);
+    console.log(`caching ${request.url}`);
+    return response;
+  };
+}
