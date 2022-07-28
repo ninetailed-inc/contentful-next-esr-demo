@@ -3,7 +3,7 @@ import {
   selectActiveExperiments,
   selectEligibleExperiences,
 } from '@ninetailed/experience.js';
-import { getAllExperiments, getExperiencesOnPage } from './contentful';
+import { ContentfulClient } from './contentful';
 import {
   buildNinetailedEdgeRequestContext,
   CachedFetcher,
@@ -57,6 +57,15 @@ export default {
       return fetch(request);
     }
 
+    const cachedFetcher = new CachedFetcher({
+      context,
+      defaultTtl: 5,
+    });
+
+    const contentfulClient = new ContentfulClient({
+      cachedFetcher,
+    });
+
     const slug = new URL(request.url).pathname;
 
     const fetchProfileOptions = {
@@ -76,8 +85,8 @@ export default {
     const [{ profile, cache }, allExperiments, experiencesOnPage] =
       await Promise.all([
         fetchEdgeProfile(fetchProfileOptions),
-        getAllExperiments(),
-        getExperiencesOnPage(slug),
+        contentfulClient.getAllExperiments(),
+        contentfulClient.getExperiencesOnPage(slug),
       ]);
 
     const joinedExperiments = selectActiveExperiments(allExperiments, profile);
@@ -152,10 +161,6 @@ export default {
 
     console.log(newUrl.href);
 
-    const cachedFetcher = new CachedFetcher({
-      context,
-      defaultTtl: 5,
-    });
     const response = await cachedFetcher.fetch(newRequest);
     const newResponse = new Response(response.body, response);
 
