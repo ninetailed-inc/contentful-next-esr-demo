@@ -9,3 +9,6 @@ route = "https://contentful-next-esr-demo.ninetailed.io/*"
 [vars]
 NINETAILED_API_KEY = '729c0659-366d-40f2-a556-8d16b1c8dc16'
 NINETAILED_ENVIRONMENT = 'esr-experience-model'
+CONTENTFUL_SPACE_ID = '0v4fokltf8be'
+CONTENTFUL_ENVIRONMENT_ID = 'master'
+CONTENTFUL_ACCESS_TOKEN = '75D4l5iQiudHd0abirtsEyrox801L_zlYuCuPYFjoU8'

@@ -20,6 +20,10 @@ type Cookies = {
 type Env = {
   NINETAILED_API_KEY: string;
   NINETAILED_ENVIRONMENT: string;
+
+  CONTENTFUL_SPACE_ID: string;
+  CONTENTFUL_ENVIRONMENT_ID: string;
+  CONTENTFUL_ACCESS_TOKEN: string;
 };
 
 type VariantSelection = {
@@ -64,6 +68,9 @@ export default {
 
     const contentfulClient = new ContentfulClient({
       cachedFetcher,
+      spaceId: env.CONTENTFUL_SPACE_ID,
+      environmentId: env.CONTENTFUL_ENVIRONMENT_ID,
+      apiToken: env.CONTENTFUL_ACCESS_TOKEN,
     });
 
     const slug = new URL(request.url).pathname;

@@ -1,7 +1,7 @@
 import { ExperienceConfiguration } from '@ninetailed/experience.js';
 import {
-  ExperienceMapper,
   ExperienceEntry,
+  ExperienceMapper,
 } from '@ninetailed/experience.js-utils-contentful';
 import type { Entry, EntryCollection } from 'contentful';
 import { CachedFetcher } from './utils';
@@ -23,30 +23,35 @@ export const entryToExperienceConfiguration = (
 
 type ContentfulClientProps = {
   cachedFetcher: CachedFetcher;
+  spaceId: string;
+  environmentId: string;
+  apiToken: string;
 };
 
 export class ContentfulClient {
   private readonly cachedFetcher: CachedFetcher;
 
-  constructor({ cachedFetcher }: ContentfulClientProps) {
+  private readonly baseUrl: string;
+
+  private readonly authHeaders: { headers: Headers };
+
+  constructor({
+    cachedFetcher,
+    spaceId,
+    environmentId,
+    apiToken,
+  }: ContentfulClientProps) {
     this.cachedFetcher = cachedFetcher;
-  }
-
-  getEntries = async <T>(query: string): Promise<EntryCollection<T>> => {
-    // TODO: move to env
-    const spaceId = '0v4fokltf8be';
-    const environmentId = 'master';
-    const apiToken = '75D4l5iQiudHd0abirtsEyrox801L_zlYuCuPYFjoU8';
-
-    const baseUrl = `https://cdn.contentful.com/spaces/${spaceId}/environments/${environmentId}/entries`;
-    const options = {
-      method: 'GET',
+    this.baseUrl = `https://cdn.contentful.com/spaces/${spaceId}/environments/${environmentId}/entries`;
+    this.authHeaders = {
       headers: new Headers({
         Authorization: `Bearer ${apiToken}`,
       }),
     };
+  }
 
-    const request = new Request(`${baseUrl}?${query}`, options);
+  getEntries = async <T>(query: string): Promise<EntryCollection<T>> => {
+    const request = new Request(`${this.baseUrl}?${query}`, this.authHeaders);
 
     const response = await this.cachedFetcher.fetch(request);
     const responseBody = await response.json();
@@ -57,12 +62,9 @@ export class ContentfulClient {
   getExperiencesOnPage = async (
     slug: string
   ): Promise<ExperienceConfiguration[]> => {
-    // TODO: move to env
     const pageContentTypeId = 'page';
-
     const pageQuery = `content_type=${pageContentTypeId}&fields.slug=${slug}&limit=1&include=10`;
 
-    // TODO: add caching
     const page = await this.getEntries(pageQuery);
 
     // Contentful doesn't type the 'includes' field
