@@ -6,7 +6,7 @@ import {
   NinetailedProvider,
   NinetailedSsrPlugin,
 } from '@ninetailed/experience.js-next';
-import { NinetailedPreviewPlugin } from '@ninetailed/experience.js-plugin-preview';
+// import { NinetailedPreviewPlugin } from '@ninetailed/experience.js-plugin-preview';
 import { IPage } from '@/types/contentful';
 
 export type IPageProps = {
