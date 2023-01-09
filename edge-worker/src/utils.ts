@@ -1,12 +1,11 @@
 import {
-  buildEmptyCache,
   buildIdentifyEvent,
   buildPageEvent,
-  Cache,
   GeoLocation,
   NinetailedRequestContext,
   Profile,
   Traits,
+  NinetailedApiClient,
 } from '@ninetailed/experience.js-shared';
 import { parse as parseLanguage } from 'accept-language-parser';
 import { v4 as uuid } from 'uuid';
@@ -15,7 +14,7 @@ import {
   ExperienceConfiguration,
   selectDistribution,
 } from '@ninetailed/experience.js';
-import { NINETAILED_PROFILE_CACHE_COOKIE } from '@ninetailed/experience.js-plugin-ssr';
+import { NINETAILED_ANONYMOUS_ID_COOKIE } from '@ninetailed/experience.js-plugin-ssr';
 
 const BASE_URL = 'https://api.ninetailed.co';
 export const EXPERIENCE_TRAIT_PREFIX = 'nt_experiment_';
@@ -32,26 +31,8 @@ type GetServerSideProfileOptions = {
   location?: GeoLocation;
 };
 
-type SendIdentifyOptions = {
-  ctx: NinetailedRequestContext;
+type SendIdentifyOptions = GetServerSideProfileOptions & {
   traits: Traits;
-  cookies: Cookies;
-  clientId: string;
-  environment?: string;
-};
-
-const getProfileCache = (cookies: Cookies): Cache => {
-  const cacheString = cookies[NINETAILED_PROFILE_CACHE_COOKIE];
-
-  if (cacheString) {
-    try {
-      return JSON.parse(decodeURIComponent(cacheString)) as Cache;
-    } catch (error) {
-      console.error(error);
-    }
-  }
-
-  return buildEmptyCache();
 };
 
 export const getVariantIndex = (
@@ -72,34 +53,32 @@ export const sendIdentify = async ({
   traits,
   clientId,
   environment,
+  url,
+  ip,
+  location,
 }: SendIdentifyOptions) => {
-  const cacheFromCookie = getProfileCache(cookies);
-  const anonymousId = cacheFromCookie.id;
+  const apiClient = new NinetailedApiClient({ clientId, environment, url });
+  const anonymousId = cookies[NINETAILED_ANONYMOUS_ID_COOKIE];
 
   const identifyEvent = buildIdentifyEvent({
     traits,
-    anonymousId,
     ctx,
     messageId: uuid(),
     timestamp: Date.now(),
     userId: '',
   });
 
-  await fetch(
-    `${BASE_URL}/v1/organizations/${clientId}/environments/${
-      environment || 'main'
-    }/profiles/${anonymousId}/events`,
+  const profile = await apiClient.upsertProfile(
     {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        events: [identifyEvent],
-        ...cacheFromCookie,
-      }),
-    }
+      profileId: anonymousId,
+      events: [
+        { ...identifyEvent, context: { ...identifyEvent.context, location } },
+      ],
+    },
+    { ip }
   );
+
+  return profile;
 };
 
 export const fetchEdgeProfile = async ({
@@ -110,58 +89,26 @@ export const fetchEdgeProfile = async ({
   url,
   ip,
   location,
-}: GetServerSideProfileOptions): Promise<{
-  profile: Profile;
-  cache: Cache;
-}> => {
-  const cacheFromCookie = getProfileCache(cookies);
-  const anonymousId = cacheFromCookie.id;
+}: GetServerSideProfileOptions): Promise<Profile> => {
+  const apiClient = new NinetailedApiClient({ clientId, environment, url });
+  const anonymousId = cookies[NINETAILED_ANONYMOUS_ID_COOKIE];
 
   const pageEvent = buildPageEvent({
     ctx,
-    anonymousId,
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
     messageId: uuid(),
     timestamp: Date.now(),
     properties: {},
   });
 
-  const request = await fetch(
-    `${url || BASE_URL}/v1/organizations/${clientId}/environments/${
-      environment || 'main'
-    }/profiles/${anonymousId}/events`,
+  const profile = await apiClient.upsertProfile(
     {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        events: [pageEvent],
-        ...cacheFromCookie,
-        ...{ ip },
-        ...{ location },
-      }),
-    }
+      profileId: anonymousId,
+      events: [{ ...pageEvent, context: { ...pageEvent.context, location } }],
+    },
+    { ip, preflight: true }
   );
 
-  const {
-    data: { profile, traitsUpdatedAt, signals },
-  } = await request.json();
-
-  return {
-    profile,
-    cache: {
-      id: profile.id,
-      random: profile.random,
-      audiences: profile.audiences,
-      location: profile.location,
-      session: profile.session,
-      traitsUpdatedAt,
-      traits: profile.traits,
-      signals,
-      sessions: cacheFromCookie.sessions,
-    },
-  };
+  return profile;
 };
 
 const getLocale = (request: Request): string => {

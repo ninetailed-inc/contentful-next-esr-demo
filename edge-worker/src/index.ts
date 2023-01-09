@@ -3,14 +3,13 @@ import {
   selectActiveExperiments,
   selectEligibleExperiences,
 } from '@ninetailed/experience.js';
+import { NINETAILED_ANONYMOUS_ID_COOKIE } from '@ninetailed/experience.js-plugin-ssr';
 import { ContentfulClient } from './contentful';
 import {
   buildNinetailedEdgeRequestContext,
   CachedFetcher,
-  EXPERIENCE_TRAIT_PREFIX,
   fetchEdgeProfile,
   getVariantIndex,
-  sendIdentify,
 } from './utils';
 
 type Cookies = {
@@ -89,12 +88,11 @@ export default {
       },
     };
 
-    const [{ profile, cache }, allExperiments, experiencesOnPage] =
-      await Promise.all([
-        fetchEdgeProfile(fetchProfileOptions),
-        contentfulClient.getAllExperiments(),
-        contentfulClient.getExperiencesOnPage(slug),
-      ]);
+    const [profile, allExperiments, experiencesOnPage] = await Promise.all([
+      fetchEdgeProfile(fetchProfileOptions),
+      contentfulClient.getAllExperiments(),
+      contentfulClient.getExperiencesOnPage(slug),
+    ]);
 
     const joinedExperiments = selectActiveExperiments(allExperiments, profile);
 
@@ -122,19 +120,19 @@ export default {
     });
 
     // Join first experiment (if not in experiment already) and write to profile cache(cookie)
-    if (!joinedExperiments.length && firstExperiment) {
-      const traitKey = `${EXPERIENCE_TRAIT_PREFIX}${firstExperiment.id}`;
-      cache.traits[traitKey] = true;
-      context.waitUntil(
-        sendIdentify({
-          traits: { traitKey: true },
-          ctx: buildNinetailedEdgeRequestContext(request),
-          clientId: env.NINETAILED_API_KEY,
-          environment: env.NINETAILED_ENVIRONMENT,
-          cookies: getCookies(request),
-        })
-      );
-    }
+    // if (!joinedExperiments.length && firstExperiment) {
+    //   const traitKey = `${EXPERIENCE_TRAIT_PREFIX}${firstExperiment.id}`;
+    //   cache.traits[traitKey] = true;
+    //   context.waitUntil(
+    //     sendIdentify({
+    //       traits: { traitKey: true },
+    //       ctx: buildNinetailedEdgeRequestContext(request),
+    //       clientId: env.NINETAILED_API_KEY,
+    //       environment: env.NINETAILED_ENVIRONMENT,
+    //       cookies: getCookies(request),
+    //     })
+    //   );
+    // }
 
     // Get variant index for each matching personalization + first experiment
     const variantSelections: VariantSelection[] = [
@@ -171,8 +169,10 @@ export default {
     const response = await cachedFetcher.fetch(newRequest);
     const newResponse = new Response(response.body, response);
 
-    newResponse.headers.append('Set-Cookie', `ntaid=${profile.id}`);
-    newResponse.headers.append('Set-Cookie', `ntpc=${JSON.stringify(cache)}`);
+    newResponse.headers.append(
+      'Set-Cookie',
+      `${NINETAILED_ANONYMOUS_ID_COOKIE}=${profile.id}`
+    );
 
     return newResponse;
   },

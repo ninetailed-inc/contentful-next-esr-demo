@@ -33,8 +33,8 @@ const ESRDemoApp = ({ Component, pageProps }: AppProps) => {
     <div className="app">
       <NinetailedProvider
         plugins={[
-          NinetailedSsrPlugin(),
-          NinetailedPreviewPlugin({
+          new NinetailedSsrPlugin(),
+          new NinetailedPreviewPlugin({
             clientId:
               process.env.NEXT_PUBLIC_NINETAILED_MANAGEMENT_CLIENT_ID ?? '',
             secret: process.env.NEXT_PUBLIC_NINETAILED_MANAGEMENT_SECRET ?? '',
