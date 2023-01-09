@@ -93,12 +93,13 @@ const BlockRenderer = ({ block }: BlockRendererProps) => {
     parent: block.parent,
   };
 
-  const experiences = (componentProps.fields.nt_experiences || []).map(
-    (experience) => {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+  const experiences = (componentProps.fields.nt_experiences || [])
+    .filter((ctfExperienceEntry) => {
+      return ExperienceMapper.isExperienceEntry(ctfExperienceEntry);
+    })
+    .map((experience) => {
       return ExperienceMapper.mapExperience(experience);
-    }
-  );
+    });
 
   return (
     <div key={`${contentTypeId}-${id}`}>

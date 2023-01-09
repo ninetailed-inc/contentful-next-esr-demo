@@ -415,71 +415,71 @@
   resolved "https://registry.yarnpkg.com/@next/swc-win32-x64-msvc/-/swc-win32-x64-msvc-12.1.6.tgz#a350caf42975e7197b24b495b8d764eec7e6a36e"
   integrity sha512-4ZEwiRuZEicXhXqmhw3+de8Z4EpOLQj/gp+D9fFWo6ii6W1kBkNNvvEx4A90ugppu+74pT1lIJnOuz3A9oQeJA==
 
-"@ninetailed/experience.js-next@3.0.0-beta.42":
-  version "3.0.0-beta.42"
-  resolved "https://registry.yarnpkg.com/@ninetailed/experience.js-next/-/experience.js-next-3.0.0-beta.42.tgz#a7e665f6cbd02c63422abbe391f1c84d4dcc4bad"
-  integrity sha512-FMNIs7SjrCnS4WlDGspKBb2ZhGvuCLpf+2/s2YNzJYP1PU0qX5W2TYB3ydn+aVeIFRFitEl007jEJU1R7vjzBA==
+"@ninetailed/experience.js-next@3.0.0-beta.44":
+  version "3.0.0-beta.44"
+  resolved "https://registry.yarnpkg.com/@ninetailed/experience.js-next/-/experience.js-next-3.0.0-beta.44.tgz#6c89a0ac41e9aece82ea54b6d09981652d12ef14"
+  integrity sha512-VTxE2eG92LYKMDFv8okDQHOp5wPJNO+pDWiiUak/5gNgq77pTB0bYRoNCu/jy9ibbFN6278C2dVj2eHpSnrsbA==
   dependencies:
-    "@ninetailed/experience.js" "3.0.0-beta.42"
-    "@ninetailed/experience.js-plugin-ssr" "3.0.0-beta.42"
-    "@ninetailed/experience.js-react" "3.0.0-beta.42"
-    "@ninetailed/experience.js-shared" "3.0.0-beta.42"
+    "@ninetailed/experience.js" "3.0.0-beta.44"
+    "@ninetailed/experience.js-plugin-ssr" "3.0.0-beta.44"
+    "@ninetailed/experience.js-react" "3.0.0-beta.44"
+    "@ninetailed/experience.js-shared" "3.0.0-beta.44"
 
-"@ninetailed/experience.js-plugin-analytics@3.0.0-beta.42":
-  version "3.0.0-beta.42"
-  resolved "https://registry.yarnpkg.com/@ninetailed/experience.js-plugin-analytics/-/experience.js-plugin-analytics-3.0.0-beta.42.tgz#d63625976ebee397a164fd0c705843e2b1124c26"
-  integrity sha512-pD1xfJHv67TgLgMg1IiA0Fzgiu+1EcbgFesZlNB0HsrkQ3pd9HnmYzZyOodJ0V0oAxmI3wvMQ0qTl/uC5aRing==
+"@ninetailed/experience.js-plugin-analytics@3.0.0-beta.44":
+  version "3.0.0-beta.44"
+  resolved "https://registry.yarnpkg.com/@ninetailed/experience.js-plugin-analytics/-/experience.js-plugin-analytics-3.0.0-beta.44.tgz#55239cd8125443c573412b96fca402d28edd1400"
+  integrity sha512-cbjp45aVbnU3J69l3/IWStpF60MhFbvhTPWaSjd4ZxhNVOnL7KuqGlsFnu0gzVs8CRTkW+Y5HTb7+w4yhgVzBA==
   dependencies:
-    "@ninetailed/experience.js-shared" "3.0.0-beta.42"
+    "@ninetailed/experience.js-shared" "3.0.0-beta.44"
     analytics "0.8.1"
     zod "3.20.2"
 
-"@ninetailed/experience.js-plugin-preview@3.0.0-beta.42":
-  version "3.0.0-beta.42"
-  resolved "https://registry.yarnpkg.com/@ninetailed/experience.js-plugin-preview/-/experience.js-plugin-preview-3.0.0-beta.42.tgz#200cbb11f7445a72eded501f60eb2cdb768b633b"
-  integrity sha512-PJQqKIC1hqjB5oTgHAVNgz+dcd0z+BOFbnJZNlfO0W9C0MfEdKXKAZvClpKAMVGlUlVVRU+gHxfwgampylJB2Q==
+"@ninetailed/experience.js-plugin-preview@3.0.0-beta.44":
+  version "3.0.0-beta.44"
+  resolved "https://registry.yarnpkg.com/@ninetailed/experience.js-plugin-preview/-/experience.js-plugin-preview-3.0.0-beta.44.tgz#fa8c8464fd0510cb4a184a700ea8cf74108999f5"
+  integrity sha512-ZMU+GEv0OgnMlh4Cin/HwbIeXVDpZ3RPPMdRDp4Dnyw9KRXCLml3BJ10wKCNxKQftP1UN7BAnLNunzVaBLoUfQ==
   dependencies:
-    "@ninetailed/experience.js" "3.0.0-beta.42"
-    "@ninetailed/experience.js-plugin-analytics" "3.0.0-beta.42"
-    "@ninetailed/experience.js-preview-bridge" "3.0.0-beta.42"
-    "@ninetailed/experience.js-shared" "3.0.0-beta.42"
+    "@ninetailed/experience.js" "3.0.0-beta.44"
+    "@ninetailed/experience.js-plugin-analytics" "3.0.0-beta.44"
+    "@ninetailed/experience.js-preview-bridge" "3.0.0-beta.44"
+    "@ninetailed/experience.js-shared" "3.0.0-beta.44"
     lodash "4.17.21"
 
-"@ninetailed/experience.js-plugin-ssr@3.0.0-beta.42":
-  version "3.0.0-beta.42"
-  resolved "https://registry.yarnpkg.com/@ninetailed/experience.js-plugin-ssr/-/experience.js-plugin-ssr-3.0.0-beta.42.tgz#5792222bdb09837882977a3692f2f9f487a3804b"
-  integrity sha512-BNIEmE7nj7X/4UDmIvsad3j4PTnKbfJhaQ+mBa6X/1/ncXP4ky8V2poyXR3oyMWkSjdwBv1aj8lztC8T1UazxA==
+"@ninetailed/experience.js-plugin-ssr@3.0.0-beta.44":
+  version "3.0.0-beta.44"
+  resolved "https://registry.yarnpkg.com/@ninetailed/experience.js-plugin-ssr/-/experience.js-plugin-ssr-3.0.0-beta.44.tgz#1016c30b9dd2eec453f919ca0820a9c6ec3e2ced"
+  integrity sha512-pIQjmCpccLdQNarMLI8oJzkvN3UgXyc8h+hAGJGN+LghYROKvPtJlZljtpxtsXDF2N6ZHrT86ftWO165kvPzzg==
   dependencies:
-    "@ninetailed/experience.js" "3.0.0-beta.42"
-    "@ninetailed/experience.js-plugin-analytics" "3.0.0-beta.42"
-    "@ninetailed/experience.js-shared" "3.0.0-beta.42"
+    "@ninetailed/experience.js" "3.0.0-beta.44"
+    "@ninetailed/experience.js-plugin-analytics" "3.0.0-beta.44"
+    "@ninetailed/experience.js-shared" "3.0.0-beta.44"
     js-cookie "3.0.1"
     uuid "9.0.0"
 
-"@ninetailed/experience.js-preview-bridge@3.0.0-beta.42":
-  version "3.0.0-beta.42"
-  resolved "https://registry.yarnpkg.com/@ninetailed/experience.js-preview-bridge/-/experience.js-preview-bridge-3.0.0-beta.42.tgz#61ae0d998e5409525a72623f3cb34e9b9b9ad087"
-  integrity sha512-N3sVkgCL+0sopARECZ00eLIHCqVInRB5DzMsfhRedPX67KZAeglnK6fzCUAakd5Cgx9gjo/3WyfGc0YdOWaKGg==
+"@ninetailed/experience.js-preview-bridge@3.0.0-beta.44":
+  version "3.0.0-beta.44"
+  resolved "https://registry.yarnpkg.com/@ninetailed/experience.js-preview-bridge/-/experience.js-preview-bridge-3.0.0-beta.44.tgz#72aeb55e8b2a54a3856546dba84dc99c52d09028"
+  integrity sha512-o9N+d9jJztt8Abj0tISb7zL4gvB/Y+2Wt4WQGG9j4gK0SfTG1YmwqBlKoCQ2Jh8QKYNXyTlruaBfc8k5BzUqNg==
   dependencies:
     zoid "9.0.86"
 
-"@ninetailed/experience.js-react@3.0.0-beta.42":
-  version "3.0.0-beta.42"
-  resolved "https://registry.yarnpkg.com/@ninetailed/experience.js-react/-/experience.js-react-3.0.0-beta.42.tgz#9b1ae023c1d2cec763de8500378d48abde9a8b6a"
-  integrity sha512-8bSR+RX0Z8n9twree8n//4ztHWawKmtSjK4zlWrkHuuHdzjV3UoOLbD/ldm7OR6loix1nBgSPscbfm0OYSRA8Q==
+"@ninetailed/experience.js-react@3.0.0-beta.44":
+  version "3.0.0-beta.44"
+  resolved "https://registry.yarnpkg.com/@ninetailed/experience.js-react/-/experience.js-react-3.0.0-beta.44.tgz#db76b2a5014a393261fc7f35fde416efb566c19f"
+  integrity sha512-YUjl7wcc+X+/I93fTkeZRcF6IIM8QwHbnnBPBVoFByzzZGcQo3an+8ETqsGf4aTW666uoAeKpDnt3ekWDxd8EQ==
   dependencies:
     "@analytics/google-analytics" "0.5.3"
-    "@ninetailed/experience.js" "3.0.0-beta.42"
-    "@ninetailed/experience.js-shared" "3.0.0-beta.42"
+    "@ninetailed/experience.js" "3.0.0-beta.44"
+    "@ninetailed/experience.js-shared" "3.0.0-beta.44"
     analytics "0.8.1"
     lodash "4.17.21"
     react-intersection-observer "8.34.0"
     react-visibility-sensor "5.1.1"
 
-"@ninetailed/experience.js-shared@3.0.0-beta.42":
-  version "3.0.0-beta.42"
-  resolved "https://registry.yarnpkg.com/@ninetailed/experience.js-shared/-/experience.js-shared-3.0.0-beta.42.tgz#0bc3dd693cab6f49bed6ca412edfccd83305f0ed"
-  integrity sha512-pMTvOJWc7FvVu0J8gsnZshlY4Wr+vprDoRZVbPqDwvccGkpvJ9eqf9j6UxwAHIcPNFxvPhiIuuopJ1DlxqHCBQ==
+"@ninetailed/experience.js-shared@3.0.0-beta.44":
+  version "3.0.0-beta.44"
+  resolved "https://registry.yarnpkg.com/@ninetailed/experience.js-shared/-/experience.js-shared-3.0.0-beta.44.tgz#383bb14f8dfad6d37a4383a43e00fd65e1c0d50d"
+  integrity sha512-IAoCMHbxoRuPJA8bS7cYNBTvr7ByUCZgLxK6ts2WwB2IW/uHpqiU2WFt6Y+JWMpa7PDKNP352Ij9lt4uOyaNVg==
   dependencies:
     async-retry "1.3.3"
     diary "0.3.1"
@@ -488,32 +488,32 @@
     ts-toolbelt "9.6.0"
     zod "3.20.2"
 
-"@ninetailed/experience.js-utils-contentful@3.0.0-beta.42":
-  version "3.0.0-beta.42"
-  resolved "https://registry.yarnpkg.com/@ninetailed/experience.js-utils-contentful/-/experience.js-utils-contentful-3.0.0-beta.42.tgz#7319c845ac4cccdd1baa764744317c2ebb9e599d"
-  integrity sha512-5zwxBc2fDIIjhEnuJK9+Q7Kg+/g5dwfrlPotBibY8uASwPx9G7gqaAtl1WkwYrmhB1jDlkCX6/vSRTpX2PO4tg==
+"@ninetailed/experience.js-utils-contentful@3.0.0-beta.44":
+  version "3.0.0-beta.44"
+  resolved "https://registry.yarnpkg.com/@ninetailed/experience.js-utils-contentful/-/experience.js-utils-contentful-3.0.0-beta.44.tgz#ba62c0b4897e81e87f484006b85a7ca3e92b6fa1"
+  integrity sha512-Q4i201aHGXixmEDFWDXRBKotMuTeR7CWiw74UxoxJs2nTkYNKxPCIVWf7DCdhGMNZmSMhEhZO11gDCOMEmCQLQ==
   dependencies:
-    "@ninetailed/experience.js" "3.0.0-beta.42"
-    "@ninetailed/experience.js-shared" "3.0.0-beta.42"
-    "@ninetailed/experience.js-utils" "3.0.0-beta.42"
+    "@ninetailed/experience.js" "3.0.0-beta.44"
+    "@ninetailed/experience.js-shared" "3.0.0-beta.44"
+    "@ninetailed/experience.js-utils" "3.0.0-beta.44"
     zod "3.20.2"
 
-"@ninetailed/experience.js-utils@3.0.0-beta.42":
-  version "3.0.0-beta.42"
-  resolved "https://registry.yarnpkg.com/@ninetailed/experience.js-utils/-/experience.js-utils-3.0.0-beta.42.tgz#331b47d27683410ce4b20efffe6ce1a29b7f351f"
-  integrity sha512-QqGUDvXyJG5n5uM9pgGUn5TaxdaYqECFnC0px8Htyx5nfeg2wW6fcuxuwP4dWjCwYY2rhsq8n8B3x4k/rUns3g==
+"@ninetailed/experience.js-utils@3.0.0-beta.44":
+  version "3.0.0-beta.44"
+  resolved "https://registry.yarnpkg.com/@ninetailed/experience.js-utils/-/experience.js-utils-3.0.0-beta.44.tgz#0f5a3c3c1fb2a8fe0e896f9ec071eeaa28408f9e"
+  integrity sha512-MjDrt4LOsTFlpG6QVUdqpz5CMRIbOSLPBoW20JQJL/fZulElIThJjl+WRROmpIVeqyGET2azgJsJDcHNj4Ne7A==
   dependencies:
-    "@ninetailed/experience.js" "3.0.0-beta.42"
-    "@ninetailed/experience.js-shared" "3.0.0-beta.42"
+    "@ninetailed/experience.js" "3.0.0-beta.44"
+    "@ninetailed/experience.js-shared" "3.0.0-beta.44"
     zod "3.20.2"
 
-"@ninetailed/experience.js@3.0.0-beta.42":
-  version "3.0.0-beta.42"
-  resolved "https://registry.yarnpkg.com/@ninetailed/experience.js/-/experience.js-3.0.0-beta.42.tgz#46050e3dfbec8bfa390a52b0f677d77d1e2018f1"
-  integrity sha512-XE8vD0fn4HiuBCgQQquETRyarz/BY8l9H7rqyajXsr/D1F4RqAnLodv7N0DBbsOSVq7U9bpx4LGBLFKnJmvblA==
+"@ninetailed/experience.js@3.0.0-beta.44":
+  version "3.0.0-beta.44"
+  resolved "https://registry.yarnpkg.com/@ninetailed/experience.js/-/experience.js-3.0.0-beta.44.tgz#27ba404a596be5612b6c01fee6b6f0668dfdc667"
+  integrity sha512-cWncz0nJF68rvZ7yywuB+tHyEfyApi9JE3zczwZjmDQDPwjPbs4iYlK+qzAradASjgX7j5iQLZCUl1BxRdn12A==
   dependencies:
-    "@ninetailed/experience.js-plugin-analytics" "3.0.0-beta.42"
-    "@ninetailed/experience.js-shared" "3.0.0-beta.42"
+    "@ninetailed/experience.js-plugin-analytics" "3.0.0-beta.44"
+    "@ninetailed/experience.js-shared" "3.0.0-beta.44"
     analytics "0.8.1"
     lodash "4.17.21"
     murmurhash-js "1.0.0"
@@ -4394,10 +4394,10 @@ type-fest@^2.5.3:
   resolved "https://registry.yarnpkg.com/type-fest/-/type-fest-2.17.0.tgz#c677030ce61e5be0c90c077d52571eb73c506ea9"
   integrity sha512-U+g3/JVXnOki1kLSc+xZGPRll3Ah9u2VIG6Sn9iH9YX6UkPERmt6O/0fIyTgsd2/whV0+gAaHAg8fz6sG1QzMA==
 
-typescript@4.6.4:
-  version "4.6.4"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.6.4.tgz#caa78bbc3a59e6a5c510d35703f6a09877ce45e9"
-  integrity sha512-9ia/jWHIEbo49HfjrLGfKbZSuWo9iTMwXO+Ca3pRsSpbsMbc7/IU8NKdCZVRRBafVPGnoJeFL76ZOAA84I9fEg==
+typescript@4.9.4:
+  version "4.9.4"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.9.4.tgz#a2a3d2756c079abda241d75f149df9d561091e78"
+  integrity sha512-Uz+dTXYzxXXbsFpM86Wh3dKCxrQqUcVMxwU54orwlJjOpO3ao8L7j5lH+dWfTwgCwIuM9GQ2kvVotzYJMXTBZg==
 
 unbox-primitive@^1.0.2:
   version "1.0.2"

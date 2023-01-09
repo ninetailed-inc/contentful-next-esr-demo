@@ -21,12 +21,12 @@
     "@contentful/rich-text-react-renderer": "15.12.0",
     "@contentful/rich-text-types": "15.12.0",
     "@heroicons/react": "1.0.6",
-    "@ninetailed/experience.js": "3.0.0-beta.42",
-    "@ninetailed/experience.js-next": "3.0.0-beta.42",
-    "@ninetailed/experience.js-plugin-preview": "3.0.0-beta.42",
-    "@ninetailed/experience.js-plugin-ssr": "3.0.0-beta.42",
-    "@ninetailed/experience.js-shared": "3.0.0-beta.42",
-    "@ninetailed/experience.js-utils-contentful": "3.0.0-beta.42",
+    "@ninetailed/experience.js": "3.0.0-beta.44",
+    "@ninetailed/experience.js-next": "3.0.0-beta.44",
+    "@ninetailed/experience.js-plugin-preview": "3.0.0-beta.44",
+    "@ninetailed/experience.js-plugin-ssr": "3.0.0-beta.44",
+    "@ninetailed/experience.js-shared": "3.0.0-beta.44",
+    "@ninetailed/experience.js-utils-contentful": "3.0.0-beta.44",
     "@types/yup": "^0.29.14",
     "accept-language-parser": "^1.5.0",
     "classnames": "2.3.1",
@@ -70,7 +70,7 @@
     "postcss": "8.4.12",
     "prettier": "2.6.2",
     "tailwindcss": "3.0.23",
-    "typescript": "4.6.4",
+    "typescript": "4.9.4",
     "wrangler": "^2.0.15"
   }
 }
