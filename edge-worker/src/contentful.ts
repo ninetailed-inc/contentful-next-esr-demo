@@ -1,19 +1,11 @@
 import { ExperienceConfiguration } from '@ninetailed/experience.js';
 import {
   ExperienceEntry,
+  ExperienceEntryLike,
   ExperienceMapper,
 } from '@ninetailed/experience.js-utils-contentful';
 import type { Entry, EntryCollection } from 'contentful';
 import { CachedFetcher } from './utils';
-
-const isExperience = (entry: Entry<any>): boolean => {
-  // TODO: move to env
-  return entry.sys.contentType.sys.id === 'nt_experience';
-};
-
-const isExperiment = (entry: Entry<any>): boolean => {
-  return entry.fields.nt_type === 'nt_experiment';
-};
 
 export const entryToExperienceConfiguration = (
   entry: ExperienceEntry
@@ -27,6 +19,23 @@ type ContentfulClientProps = {
   environmentId: string;
   apiToken: string;
 };
+
+const resolveExperienceEntry = <T extends object>(
+  ctfExperienceEntry: ExperienceEntryLike<T>,
+  includes?: { Entry: Entry<any>[] }
+): ExperienceEntry<T> => ({
+  ...ctfExperienceEntry,
+  fields: {
+    ...ctfExperienceEntry.fields,
+    nt_audience: includes?.Entry.find(
+      (entry) => entry.sys.id === ctfExperienceEntry.fields.nt_audience?.sys.id
+    ),
+    //@ts-ignore
+    nt_variants: ctfExperienceEntry.fields.nt_variants?.map((variant) =>
+      includes?.Entry.find((entry) => entry.sys.id === variant.sys.id)
+    ),
+  },
+});
 
 export class ContentfulClient {
   private readonly cachedFetcher: CachedFetcher;
@@ -67,11 +76,13 @@ export class ContentfulClient {
 
     const page = await this.getEntries(pageQuery);
 
-    // Contentful doesn't type the 'includes' field
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-    return (page.includes.Entry as ExperienceEntry[])
-      .filter(isExperience)
-      .map(entryToExperienceConfiguration);
+    return (page.includes.Entry as Entry<any>[])
+      .filter((ctfEntry) => ctfEntry.sys.contentType.sys.id === 'nt_experience')
+      .map((ctfExperienceEntry) =>
+        resolveExperienceEntry(ctfExperienceEntry, page.includes)
+      )
+      .filter(ExperienceMapper.isExperienceEntry)
+      .map(ExperienceMapper.mapExperience);
   };
 
   getAllExperiments = async (): Promise<ExperienceConfiguration[]> => {
@@ -84,7 +95,11 @@ export class ContentfulClient {
     const allExperiences = await this.getEntries(allExperiencesQuery);
 
     return (allExperiences.items as ExperienceEntry[])
-      .filter(isExperiment)
-      .map(entryToExperienceConfiguration);
+      .map((ctfExperienceEntry) =>
+        resolveExperienceEntry(ctfExperienceEntry, allExperiences.includes)
+      )
+      .filter(ExperienceMapper.isExperienceEntry)
+      .filter(ExperienceMapper.isExperiment)
+      .map(ExperienceMapper.mapExperiment);
   };
 }

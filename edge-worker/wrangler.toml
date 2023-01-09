@@ -7,8 +7,8 @@ minify = true
 route = "https://contentful-next-esr-demo.ninetailed.io/*"
 
 [vars]
-NINETAILED_API_KEY = '729c0659-366d-40f2-a556-8d16b1c8dc16'
-NINETAILED_ENVIRONMENT = 'esr-experience-model'
-CONTENTFUL_SPACE_ID = '0v4fokltf8be'
+NINETAILED_API_KEY = 'b4b2fa59-1199-4942-8a87-f6228272a26a'
+NINETAILED_ENVIRONMENT = 'main'
+CONTENTFUL_SPACE_ID = '0au1p5a77y87'
 CONTENTFUL_ENVIRONMENT_ID = 'master'
-CONTENTFUL_ACCESS_TOKEN = '75D4l5iQiudHd0abirtsEyrox801L_zlYuCuPYFjoU8'
+CONTENTFUL_ACCESS_TOKEN = 'H_6sFABJ99WYy-H90Z38URIbuYhqYjlw_TjR2J4jH2c'
