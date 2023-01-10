@@ -91,7 +91,9 @@ export default {
     const [profile, allExperiments, experiencesOnPage] = await Promise.all([
       fetchEdgeProfile(fetchProfileOptions),
       contentfulClient.getAllExperiments(),
-      contentfulClient.getExperiencesOnPage(slug),
+      contentfulClient.getExperiencesOnPage(
+        slug === '/' ? '/' : slug.replace(/^\/+/, '')
+      ),
     ]);
 
     const joinedExperiments = selectActiveExperiments(allExperiments, profile);
