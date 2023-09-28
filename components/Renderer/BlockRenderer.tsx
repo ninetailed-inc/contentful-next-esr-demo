@@ -106,9 +106,9 @@ const BlockRenderer = ({ block }: BlockRendererProps) => {
       <Experience
         {...componentProps}
         id={componentProps.sys.id}
+        component={ComponentRenderer}
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
-        component={ComponentRenderer}
         experiences={experiences}
         loadingComponent={ESRLoadingComponent}
       />

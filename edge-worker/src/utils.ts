@@ -1,23 +1,12 @@
 import {
-  buildIdentifyEvent,
   buildPageEvent,
   GeoLocation,
   NinetailedRequestContext,
-  Profile,
-  Traits,
   NinetailedApiClient,
+  NINETAILED_ANONYMOUS_ID_COOKIE,
 } from '@ninetailed/experience.js-shared';
 import { parse as parseLanguage } from 'accept-language-parser';
 import { v4 as uuid } from 'uuid';
-
-import {
-  ExperienceConfiguration,
-  selectDistribution,
-} from '@ninetailed/experience.js';
-import { NINETAILED_ANONYMOUS_ID_COOKIE } from '@ninetailed/experience.js-plugin-ssr';
-
-const BASE_URL = 'https://api.ninetailed.co';
-export const EXPERIENCE_TRAIT_PREFIX = 'nt_experiment_';
 
 type Cookies = { [key: string]: string };
 
@@ -31,56 +20,6 @@ type GetServerSideProfileOptions = {
   location?: GeoLocation;
 };
 
-type SendIdentifyOptions = GetServerSideProfileOptions & {
-  traits: Traits;
-};
-
-export const getVariantIndex = (
-  experience: ExperienceConfiguration,
-  profile: Profile
-): number => {
-  const distribution = selectDistribution({
-    experience,
-    profile,
-  });
-
-  return distribution?.index ?? 0;
-};
-
-export const sendIdentify = async ({
-  ctx,
-  cookies,
-  traits,
-  clientId,
-  environment,
-  url,
-  ip,
-  location,
-}: SendIdentifyOptions) => {
-  const apiClient = new NinetailedApiClient({ clientId, environment, url });
-  const anonymousId = cookies[NINETAILED_ANONYMOUS_ID_COOKIE];
-
-  const identifyEvent = buildIdentifyEvent({
-    traits,
-    ctx,
-    messageId: uuid(),
-    timestamp: Date.now(),
-    userId: '',
-  });
-
-  const profile = await apiClient.upsertProfile(
-    {
-      profileId: anonymousId,
-      events: [
-        { ...identifyEvent, context: { ...identifyEvent.context, location } },
-      ],
-    },
-    { ip }
-  );
-
-  return profile;
-};
-
 export const fetchEdgeProfile = async ({
   ctx,
   cookies,
@@ -89,7 +28,7 @@ export const fetchEdgeProfile = async ({
   url,
   ip,
   location,
-}: GetServerSideProfileOptions): Promise<Profile> => {
+}: GetServerSideProfileOptions) => {
   const apiClient = new NinetailedApiClient({ clientId, environment, url });
   const anonymousId = cookies[NINETAILED_ANONYMOUS_ID_COOKIE];
 
@@ -100,15 +39,13 @@ export const fetchEdgeProfile = async ({
     properties: {},
   });
 
-  const profile = await apiClient.upsertProfile(
+  return apiClient.upsertProfile(
     {
       profileId: anonymousId,
       events: [{ ...pageEvent, context: { ...pageEvent.context, location } }],
     },
     { ip, preflight: true }
   );
-
-  return profile;
 };
 
 const getLocale = (request: Request): string => {

@@ -1,15 +1,9 @@
-import {
-  isExperienceMatch,
-  selectActiveExperiments,
-  selectEligibleExperiences,
-} from '@ninetailed/experience.js';
-import { NINETAILED_ANONYMOUS_ID_COOKIE } from '@ninetailed/experience.js-plugin-ssr';
-import { ContentfulClient } from './contentful';
+import { NINETAILED_ANONYMOUS_ID_COOKIE } from '@ninetailed/experience.js-shared';
+
 import {
   buildNinetailedEdgeRequestContext,
   CachedFetcher,
   fetchEdgeProfile,
-  getVariantIndex,
 } from './utils';
 
 type Cookies = {
@@ -19,10 +13,6 @@ type Cookies = {
 type Env = {
   NINETAILED_API_KEY: string;
   NINETAILED_ENVIRONMENT: string;
-
-  CONTENTFUL_SPACE_ID: string;
-  CONTENTFUL_ENVIRONMENT_ID: string;
-  CONTENTFUL_ACCESS_TOKEN: string;
 };
 
 type VariantSelection = {
@@ -65,15 +55,6 @@ export default {
       defaultTtl: 5,
     });
 
-    const contentfulClient = new ContentfulClient({
-      cachedFetcher,
-      spaceId: env.CONTENTFUL_SPACE_ID,
-      environmentId: env.CONTENTFUL_ENVIRONMENT_ID,
-      apiToken: env.CONTENTFUL_ACCESS_TOKEN,
-    });
-
-    const slug = new URL(request.url).pathname;
-
     const fetchProfileOptions = {
       ctx: buildNinetailedEdgeRequestContext(request),
       clientId: env.NINETAILED_API_KEY,
@@ -88,70 +69,17 @@ export default {
       },
     };
 
-    const [profile, allExperiments, experiencesOnPage] = await Promise.all([
-      fetchEdgeProfile(fetchProfileOptions),
-      contentfulClient.getAllExperiments(),
-      contentfulClient.getExperiencesOnPage(
-        slug === '/' ? '/' : slug.replace(/^\/+/, '')
-      ),
-    ]);
-
-    const joinedExperiments = selectActiveExperiments(allExperiments, profile);
-
-    const eligibleExperiences = selectEligibleExperiences({
-      experiences: experiencesOnPage,
-      activeExperiments: joinedExperiments,
-    });
-
-    const matchingExperiences = eligibleExperiences.filter((experience) => {
-      return isExperienceMatch({
-        experience,
-        activeExperiments: joinedExperiments,
-        profile,
-      });
-    });
-
-    const matchingPersonalizations = matchingExperiences.filter(
-      (experience) => {
-        return experience.type === 'nt_personalization';
-      }
+    const { profile, experiences } = await fetchEdgeProfile(
+      fetchProfileOptions
     );
 
-    const firstExperiment = matchingExperiences.find((experience) => {
-      return experience.type === 'nt_experiment';
-    });
-
-    // Join first experiment (if not in experiment already) and write to profile cache(cookie)
-    // if (!joinedExperiments.length && firstExperiment) {
-    //   const traitKey = `${EXPERIENCE_TRAIT_PREFIX}${firstExperiment.id}`;
-    //   cache.traits[traitKey] = true;
-    //   context.waitUntil(
-    //     sendIdentify({
-    //       traits: { traitKey: true },
-    //       ctx: buildNinetailedEdgeRequestContext(request),
-    //       clientId: env.NINETAILED_API_KEY,
-    //       environment: env.NINETAILED_ENVIRONMENT,
-    //       cookies: getCookies(request),
-    //     })
-    //   );
-    // }
-
-    // Get variant index for each matching personalization + first experiment
     const variantSelections: VariantSelection[] = [
-      ...matchingPersonalizations.map((experience) => {
+      ...experiences.map((experience) => {
         return {
-          experienceId: experience.id,
-          variantIndex: getVariantIndex(experience, profile),
+          experienceId: experience.experienceId,
+          variantIndex: experience.variantIndex,
         };
       }),
-      ...(firstExperiment
-        ? [
-            {
-              experienceId: firstExperiment.id,
-              variantIndex: getVariantIndex(firstExperiment, profile),
-            },
-          ]
-        : []),
     ];
 
     const newUrl = new URL(request.url);
